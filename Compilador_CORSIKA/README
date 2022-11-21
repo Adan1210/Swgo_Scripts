@@ -1,0 +1,26 @@
+Pasos para compliar el archivo binario DAT0000.. de corsika
+
+1. Una vez obtenido el archivo DAT000001 (por ejemplo) llevelo al directorio "Compilador_corsika" junto con los demas archivos.
+
+2. Abra el archivo "readpartExample.cc" vaya a la linea 29:
+
+                            29  corsikafile file("DAT000...");  
+ 
+   digite el nombre de su archivo binario dentro de las comillas, para nuestro caso:
+
+                            29  corsikafile file("DAT000001"); 
+   
+   guarde y cierre el archivo. 
+   
+3. Abra una terminal en el mismo directorio "Compilador corsika" y digite el siguiente codigo (compile linea por linea):
+   
+      make
+   
+      ./readpartExample DAT000001 > Data1.txt
+   
+   "Data1.txt" es el nombre que usted asigne a su archivo de salida en formato .txt, y listo.
+
+5. Vuelva repetir los pasos para un nuevo archivo DAT00000...
+
+6. Fin
+                                  
