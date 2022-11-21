@@ -31,7 +31,7 @@ int main (){
  while (file.findnextrun())
     {
      run theRun=file.getnextrun();
-      cout << "Type" << "\t" << "Eventnum" << "\t" << "Weight" << "\t" << "R" << "\t" <<"X"<< "\t" <<"Y"<< "\t" << "Zdeca(cm)" <<"\t" <<"Zstart(cm)" <<"\t"<<"T(ns)"<<"\t"<< "Obslev(cm)"<<"\t"<<"Px(GeV/c)" << "\t" <<"Py(GeV/c)" << "\t" <<"Pz(GeV/c)" << "\t" << "P(eV/c)" << "\t" << "Energy" << "\t" << "primTheta"<<"\t"<<"primPhi"<<endl;
+      cout << "Type" << "\t" << "Eventnum" << "\t" << "Weight" << "\t" << "R_m" << "\t" <<"X_m"<< "\t" <<"Y_m"<< "\t" << "Zdeca_cm" <<"\t" <<"Zstart_cm" <<"\t"<<"T_ns"<<"\t"<< "Obslev_cm"<<"\t"<<"Px_GeV/c" << "\t" <<"Py_GeV/c)" << "\t" <<"Pz_GeV/c" << "\t" << "P_eV/c" << "\t" << "Energy" << "\t" << "primTheta"<<"\t"<<"primPhi"<<endl;
       while (theRun.findnextevent())
 	{
 	  event theEvent=theRun.getnextevent();
