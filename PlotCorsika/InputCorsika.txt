@@ -1,5 +1,0 @@
---> "corsika77420Linux_QGSJET_urqmd_thin" successfully installed in :
-    /home/adan1210/corsika-77420/run/
- 
---> You can run CORSIKA in /home/adan1210/corsika-77420/run/ using for instance :
-    ./corsika77420Linux_QGSJET_urqmd_thin < all-inputs-thin > output.txt
