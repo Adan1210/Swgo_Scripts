@@ -1,3 +1,3 @@
 # SWGO
-1) The "config" carpet is useded for simulation the "Main-Array" of SWGO in Aerie.
+1) The "config" carpet is useded for simulation the "Reference-Model" of SWGO array in Aerie.
 
