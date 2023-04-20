@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+
+<detectorConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:noNamespaceSchemaLocation="./DetectorConfig.xsd">
+
+  <survey> ./config/survey.xml   </survey>
+  <tdcmap> ./config/tdcmap.xml </tdcmap>
+  <channelStatusMap> ./config/channelstatus.xml  </channelStatusMap>
+
+</detectorConfig>
+
