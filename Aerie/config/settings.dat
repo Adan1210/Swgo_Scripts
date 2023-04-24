@@ -1,0 +1,111 @@
+##########################################################################
+## settings.dat,v 2.0 2013-12-09
+##
+## This the configuration file for hawcsim.
+## It holds all the parameters of the simulation (except for geometry).
+##
+## You can use m,cm,mm as length units
+## String parameters should have a "0" in front
+## Changes in this file are effective without recompilation
+##########################################################################
+
+## EventVerbosity parameter controls the event output, hawcsim prints to the
+## screen after the end of each event
+## If EventVerbosity is n, hawcsim prints output at the screen every n events
+## If EventVerbosity is 0, hawcsim doesn't print any event output at the screen
+EventVerbosity          10000
+
+##The information for all (e-,e+,gammas) with total energy greater than eprint
+##will be saved at the output file at the end of each event.
+##NOTE: There is no such energy threshold for all the other particles. Their info
+##      will be saved irrespectively of their total energy.
+eprint                  0.1 ##in GeV
+
+MagneticDeclination 4.73 deg
+
+# This is a default value which should be larger than most corsika events.
+# Test your setup for the best value.
+MaxNumSymParticles  2000000
+##### PARAMETERS FOR THE SHOWER CORE DISTRIBUTIONS #####
+# If DynamicCore=0 then showers are thrown uniformly on a rectangular
+# area concentric with the detector and with dimensions 2X_max x 2Y_max.
+# If DynamicCore=1 showers are thrown on a radial distribution with rmax = X_max
+# else showers are thrown flat in XY (not flat in R) on an annulus with Rmax=X_max and Rmin=Y_max
+# Used in PrimaryGeneratorAction::PrepareDistros()
+DynamicCore             1
+
+## Maximum range of core position
+X_max                   0 m  ##This becomes R_Max if DynamicCore!=0
+Y_max                   1000 m  ##This is ignored if DynamicCore!=0
+
+
+## Common core offset
+X_Offset                0 m
+Y_Offset                0 m
+
+##### OPTICAL PHYSICS #####
+CerenkovMaxNumofPhotons 300     ## Maximum number of photons per step
+CerenkovVerbosity       0
+
+AbsorptionProcess       1       ## Along step absorption in the water or in the air
+AbsorptionVerbosity     0
+
+RayleighScattering      1
+RayleighVerbosity       0
+
+MieScattering           1
+MieVerbosity            0
+
+BoundaryProcess         1       ## This is for reflections, refractions,absorptions on geom boundaries
+BoundaryVerbosity       0
+
+##### VISUALIZATION OPTIONS #####
+# 0 == Invisible
+# 1 == Visible
+UseVisualization        1
+
+GroundVisible           0
+GroundColour            1  0,0,0 #.6,.4,.2
+AirVisible              0
+AirColour               1  1,1,1 #.6,.4,.2
+
+GlassVisible            1
+#GlassColour            1  0,1,1,.2
+
+PMTBaseVisible          1
+PMTBaseColour           1  .3,.3,.3,0.1
+
+DynodeVisible           1
+#DynodeColour           1  .5,.5,.5
+
+VacuumVisible           0
+
+
+InBaffleVisible         1
+InBaffleColour          1  .9,.9,.9 #1,1,1
+
+OutBaffleVisible        1
+OutBaffleColour         1  0,0,0 #.5,.5,.5
+
+TankWaterVisible        1
+TankWaterColour         1   .25,.25,1,0.05
+TankWaterWireFrame      0
+
+TankTankVisible         1
+TankTankBottomVisible   0
+TankTankWireFrame       1
+TankCoverVisible        0
+TankColour              1    .5,.5,.5 #,.000002
+
+
+##### CUTS #####
+## These are **production** cuts. No secondary particles with range smaller than
+## the cut are produced. **Geant4 tracks all particles down to zero energy.**
+Gamma                   90 cm
+Electron                3 mm   ##e- e+
+PhysicsVerbosity        0
+DumpCutValues           0
+
+
+##### OTHER #####
+GLG4UseGhostVolumes     0
