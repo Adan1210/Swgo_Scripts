@@ -1,4 +1,0 @@
-Instalation of Aerie using Docker:
-xhost + 127.0.0.1 && docker run --rm -it -e DISPLAY=host.docker.internal:0 --name SWGO-AERIE --device=/dev/dri --privileged -v /tmp/.X11-unix/:/tmp/.X11-unix -v $DATA_PATH_LOCAL:$DATA_PATH_DOCKER registry.gitlab.com/swgo-collaboration/aerie-install/release:master
-Instalation of Aerie and linked a capet project using Docker (Change the rute):
-xhost + 127.0.0.1 && docker run --rm -it -e DISPLAY=host.docker.internal:0 --name SWGO-AERIE --device=/dev/dri --privileged -v /tmp/.X11-unix/:/tmp/.X11-unix -v $DATA_PATH_LOCAL:$DATA_PATH_DOCKER -v $(pwd):/home/swgo/swgo-example registry.gitlab.com/swgo-collaboration/aerie-install/release:master
