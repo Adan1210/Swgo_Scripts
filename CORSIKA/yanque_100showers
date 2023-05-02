@@ -3,7 +3,7 @@ EVTNR   1                              number of first shower event
 NSHOW   100                            number of showers to generate
 PRMPAR  1                              particle type of prim. particle
 ESLOPE  -2.7                           slope of primary energy spectrum
-ERANGE  0.75E3  0.75E3                       energy range of primary particle
+ERANGE  0.75E3  0.75E3                 energy range of primary particle
 THETAP  0.  0.                         range of zenith angle (degree)
 PHIP    -180.  180.                    range of azimuth angle (degree)
 SEED    1   0   0                      seed for 1. random number sequence
