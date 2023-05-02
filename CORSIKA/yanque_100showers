@@ -9,7 +9,7 @@ PHIP    -180.  180.                    range of azimuth angle (degree)
 SEED    1   0   0                      seed for 1. random number sequence
 SEED    2   0   0                      seed for 2. random number sequence
 SEED    3   0   0                      seed for 3. random number sequence
-OBSLEV  4950.E2                         observation level Yanque(in cm)
+OBSLEV  4950.E2                        observation level Yanque(in cm)
 FIXCHI  0.                             starting altitude (g/cm**2)
 MAGNET  23.007  -3.723                 magnetic field centr. Europe
 HADFLG  0  0  0  0  0  2               flags hadr.interact.&fragmentation
