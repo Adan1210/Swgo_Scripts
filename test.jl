@@ -1,4 +1,4 @@
-using UnROOT, Plots, Statistics, DataFrames, CSV, DataStructures
+using UnROOT, Plots, Statistics, DataFrames, CSV
 # Debugging
 root_file                = ROOTFile("/home/lmorales/swgo/swgo_files/DATA_Colaboration/ROOT_Aerie/hawcsim-DAT000091_A1_gamma_0_50000.root")
 
@@ -30,3 +30,4 @@ list = [sublista for sublista in list if !isempty(sublista)]
 # Filtrar los grupos vacíos
 list_filter = [[sublista for sublista in subgrupo if sublista[3] > 50000] for subgrupo in list]
 list_filter = filter(!isempty, list_filter)
+212+121
