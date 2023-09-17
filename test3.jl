@@ -39,3 +39,94 @@ for i in 1:4000
     end
 end
 list_energies_total
+
+
+
+using LightXML
+using DataFrames
+
+# Leer el archivo XML
+xml_doc = parse_file("./survey.xml")  # Reemplaza "ruta_del_archivo.xml" con la ruta real de tu archivo
+
+# Obtener el elemento raíz del documento
+root_element = root(xml_doc)
+
+
+# Buscar todos los elementos <layout>
+layout_element = find_element(root_element, "layout")
+
+# Buscar todos los elementos <tank> dentro de <layout>
+tanks = get_elements_by_tagname(layout_element, "tank")
+
+# Crear un DataFrame vacío
+df = DataFrame(ID = Int[], x = Float64[], y = Float64[], z = Float64[])
+
+# Iterar sobre cada tank y luego sobre cada channel
+for tank in tanks
+    channels = get_elements_by_tagname(tank, "channel")
+    println("Número de canales en este tanque: ", length(channels))
+    for channel in channels
+        id = parse(Int, attribute(channel, "id"))
+        position_element = find_element(channel, "position")
+        if position_element === nothing
+            println("No se encontró el elemento de posición para el canal con ID: ", id)
+            continue
+        end
+        x = parse(Float64, content(find_element(position_element, "x")))
+        y = parse(Float64, content(find_element(position_element, "y")))
+        z = parse(Float64, content(find_element(position_element, "z")))
+        push!(df, (ID=id, x=x, y=y, z=z))
+    end
+end
+# Mostrar el DataFrame
+print(df)
+
+using LightXML
+using DataFrames
+
+# Leer el archivo XML
+xml_doc = xml_doc = parse_file("./survey.xml")  # Reemplaza "ruta_del_archivo.xml" con la ruta real de tu archivo
+
+# Obtener el elemento raíz del documento
+root_element = root(xml_doc)
+
+# Buscar todos los elementos <layout>
+layout_element = find_element(root_element, "layout")
+
+# Buscar todos los elementos <tank> dentro de <layout>
+tanks = get_elements_by_tagname(layout_element, "tank")
+
+# Crear un DataFrame vacío
+df = DataFrame(ID = Int[], x = Float64[], y = Float64[], z = Float64[])
+
+# Iterar sobre cada tank, luego sobre cada conjunto <channels> y finalmente sobre cada <channel>
+for tank in tanks
+    channels_set = find_element(tank, "channels")
+    if channels_set !== nothing
+        channels = get_elements_by_tagname(channels_set, "channel")
+        println("Número de canales en este tanque: ", length(channels))
+        for channel in channels
+            id = parse(Int, attribute(channel, "id"))
+            position_element = find_element(channel, "position")
+            if position_element === nothing
+                println("No se encontró el elemento de posición para el canal con ID: ", id)
+                continue
+            end
+            x = parse(Float64, content(find_element(position_element, "x")))
+            y = parse(Float64, content(find_element(position_element, "y")))
+            z = parse(Float64, content(find_element(position_element, "z")))
+            push!(df, (ID=id, x=x, y=y, z=z))
+        end
+    end
+end
+
+# Mostrar el DataFrame
+df
+
+print(df)
+
+
+
+
+
+
