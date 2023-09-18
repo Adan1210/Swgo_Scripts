@@ -19,11 +19,11 @@ def shower100(matrix,q,subd):
         zeros[int(x),int(y)] += e
         
     zeros=zeros/np.amax(zeros)
-    
+    file_name =  f'./{subd}/shower100_{q}.png'
     plt.figure(figsize=(1, 1), dpi = 600)
     plt.axis('off')
     plt.imshow(zeros,cmap='gray_r')
-    plt.savefig('./shower100_%d.png' % (q) )
+    plt.savefig(file_name)
     plt.close()
     
     
@@ -44,6 +44,7 @@ def shower600(matrix,q,subd):
         zeros4[int(x),int(y)] += e
         
     zeros4=zeros4/np.amax(zeros4)
+
     file_name =  f'./{subd}/shower600_{q}.png'
     plt.figure(figsize=(2, 2), dpi = 100)
     plt.axis('off')
