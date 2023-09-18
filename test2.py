@@ -28,13 +28,7 @@ def shower100(matrix,q,subd):
     
     
 
-#for k in range(0,360):
-#    for l in range(0,50):
- #       b = 1 - 0.0055 * k
-  #      R = 20 + l * 0.125
-   #     ronchi(R,D,o,b,lines, q)
-    #    q = q+1
-        
+
 def shower600(matrix,q,subd):
     
     zeros4 = np.zeros((100,100))
