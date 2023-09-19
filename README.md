@@ -1,2 +1,2 @@
 # SWGO Scripts
-- Configurations and manuals for Corsika, Aerie and Reconstruction. 
+- Scripts for reconstruction of Energy in SWGO with Machine Learning.
