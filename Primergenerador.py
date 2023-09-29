@@ -31,26 +31,26 @@ for number in unique_numbers:
 
 ####################################################################
 # IMAGE GENERATION FUNCTION 
-def shower600(matrix,q):
+def shower100(matrix,q):
     
-    zeros4 = np.zeros((100,100))
-    col_1= matrix[:,0]//6
-    col_2= matrix[:,1]//6
+    zeros = np.zeros((600,600))
+    col_1= matrix[:,0]//1
+    col_2= matrix[:,1]//1
     nmatrix = np.transpose(np.array([col_1,col_2,matrix[:,2]]))
     
     for i in range(len(nmatrix)):
-        x = nmatrix[i,0] + 50 
-        y = nmatrix[i,1] + 50
+        x = nmatrix[i,0] + 300 
+        y = nmatrix[i,1] + 300
         e = nmatrix[i,2]
     
-        zeros4[int(x),int(y)] += e
+        zeros[int(x),int(y)] += e
         
-    zeros4=zeros4/np.amax(zeros4)
+    zeros=zeros/np.amax(zeros)
 
-    file_name =  f'/home/rhorna/shower/Swgo_Scripts/images/shower600_{q}.png'
-    plt.figure(figsize=(1, 1), dpi = 100)
+    file_name =  f'/home/rhorna/shower/Swgo_Scripts/images/shower100_{q}.png'
+    plt.figure(figsize=(1, 1), dpi = 300)
     plt.axis('off')
-    plt.imshow(zeros4,cmap='gray_r')
+    plt.imshow(zeros,cmap='gray_r')
     plt.savefig(file_name)
     plt.close()
     
@@ -59,7 +59,7 @@ def shower600(matrix,q):
 # Mini test ()
 q = 1
 for i in unique_numbers:
-    shower600(matrices[i],q)
+    shower100(matrices[i],q)
 
     # Comment conditional to make full generation
     #if abs(i -unique_numbers[1000]) < 0.001:
