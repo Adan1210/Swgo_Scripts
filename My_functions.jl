@@ -1,5 +1,5 @@
 #My functions
-module my_functions
+module My_functions
 
 export flatten_to_level, replace_ID_with_coords
 
