@@ -1,0 +1,2 @@
+- The file Creation_Images.jl contains the script for the creation of the images from the data of SWGO's server. The images will be used for the training of the model.
+- The file ID_to_positions.jl contains the script for create the file with the positions of the PMTs for each ID of the survey.
