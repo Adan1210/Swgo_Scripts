@@ -102,3 +102,4 @@ end
 
 path = path_SWGO * "/swgo_files/Images_ML/"
 generate_scatter_plots(main_list, path, 1)
+23
