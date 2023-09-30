@@ -11,7 +11,7 @@ dict_ID = Dict(row.ID => (row.x, row.y, row.z) for row in eachrow(df_ID));
 ##############################################################################################
 #Initialize the Files
 path = [];
-list_files_values=[["DAT" * lpad(i, 6, '0'), j] for i in 102:150, j in 1:4];
+list_files_values=[["DAT" * lpad(i, 6, '0'), j] for i in 1:5, j in 1:4];
 
 main_list = [];
 for i in 1:length(list_files_values)
@@ -41,6 +41,7 @@ for i in 1:length(list_files_values)
     list = temp_list;
     append!(main_list, list)
 end
+
 main_list
 
 i
