@@ -1,17 +1,18 @@
-using LightXML, DataFrames, Statistics, Parquet
-# Leer el archivo XML
-path_survey = "/home/adan1210/Desktop/swgo_scripts/Arrays/survey_A1.xml";
-xml_doc = xml_doc = parse_file(path_survey);  # Reemplaza "ruta_del_archivo.xml" con la ruta real de tu archivo
-# Obtener el elemento raíz del documento
+using LightXML, DataFrames, Statistics, Parquet, CSV
+# Read the XML file
+path_SWGO = pwd();
+path_survey = path_SWGO * "/Arrays/survey_A1.xml";
+xml_doc = xml_doc = parse_file(path_survey);  
+# Obtain the root element
 root_element = root(xml_doc);
-# Buscar todos los elementos <layout>
+# Shear all <layout>
 layout_element = find_element(root_element, "layout");
-# Buscar todos los elementos <tank> dentro de <layout>
+# Shear all elements <tank> inside in <layout>
 tanks = get_elements_by_tagname(layout_element, "tank");
 
-# Crear un DataFrame vacío
+# Create a null df
 df1 = DataFrame(ID = Int[], x = Float64[], y = Float64[], z = Float64[]);
-# Iterar sobre cada tank, luego sobre cada conjunto <channels> y finalmente sobre cada <channel>
+# Iterate over each tank, then over each set of <channels>, and finally over each <channel>.
 for tank in tanks
     channels_set = find_element(tank, "channels")
     if channels_set !== nothing
@@ -31,9 +32,9 @@ for tank in tanks
         end
     end
 end
-# Crear un DataFrame vacío
+# Create a null df
 df2 = DataFrame(ID = Int[], x = Float64[], y = Float64[], z = Float64[]);
-# Iterar sobre cada tank y extraer la información de posición
+# Iterate over each tank and extract the position information.
 for tank in tanks
     id = parse(Int, attribute(tank, "id"))
     position_element = find_element(tank, "position")
@@ -45,9 +46,9 @@ for tank in tanks
     end
 end
 
-# Iterar sobre las filas de dataframe2 y sumarlas a las filas correspondientes de dataframe1
+# Iterate over the row of df2 and sum over the rows of df1.
 for i in 1:nrow(df2)
-    # Indices de las filas en dataframe1 a las que se sumará la fila i de dataframe2
+    # Indices of the rows in df1 to which row i of df2 will be added.
     idx1 = 2*i - 1
     idx2 = 2*i
     
@@ -59,10 +60,16 @@ for i in 1:nrow(df2)
     df1[idx2, :y] += df2[i, :y]
     df1[idx2, :z] += df2[i, :z]
 end
-# Cuetiones de compatibilidad tenemos que poner ID como Float64
+# Compatibility issues we have to put ID as Float64
 df1.ID = Float64.(df1.ID)
 df1
 
+# Write the CSV file
+path_ID_table_CSV = path_SWGO * "/Arrays/table_ID_and_positions_A1.csv"
+CSV.write(path_ID_table_CSV, df1)
+
 # Write the Parquet file
-path = "/home/adan1210/Desktop/swgo_scripts/table_ID_and_positions_A1.parquet"
-Parquet.write_parquet(path, df1)
+# path_ID_table_parquet = path_SWGO * "/Arrays/table_ID_and_positions_A1.parquet"
+# Parquet.write_parquet(path_ID_table_parquet, df1)
+# Read the Parquet file
+# df_ID = DataFrame(Parquet.Table(path_ID))

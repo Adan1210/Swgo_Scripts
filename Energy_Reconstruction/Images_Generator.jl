@@ -1,12 +1,12 @@
 include("../data_analysis.jl")
 using .DataAnalysis: replace_ID_with_coords
-using  UnROOT, DataFrames, Base.Threads, Parquet, Plots
+using  UnROOT, DataFrames, Base.Threads, CSV, Plots
+##############################################################################################
+# Import the CSV file
+path_SWGO = pwd();
+path_ID_CSV = path_SWGO * "/Arrays/table_ID_and_positions_A1.csv";
 
-# Import the Parquet file with the ID and the positions
-path_SWGO = dirname(pwd())
-path_ID = path_SWGO * "/Arrays/table_ID_and_positions_A1.parquet"
-
-df_ID = DataFrame(Parquet.Table(path_ID));
+df_ID = CSV.read(path_ID_CSV, DataFrame);
 dict_ID = Dict(row.ID => (row.x, row.y, row.z) for row in eachrow(df_ID));
 ##############################################################################################
 #Initialize the Files
