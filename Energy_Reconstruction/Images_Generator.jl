@@ -1,10 +1,12 @@
-include("../My_functions.jl")
-using .My_functions: replace_ID_with_coords
-using  UnROOT, DataFrames, CSV, Base.Threads, Parquet, Plots
+include("../data_analysis.jl")
+using .DataAnalysis: replace_ID_with_coords
+using  UnROOT, DataFrames, Base.Threads, Parquet, Plots
 
-# Import the CSV file with the ID and the positions
-path_ID = "/home/adan1210/Desktop/swgo_scripts/table_ID_and_positions_A1.parquet"
-df_ID = DataFrame(Parquet.Table(path_ID))
+# Import the Parquet file with the ID and the positions
+path_SWGO = dirname(pwd())
+path_ID = path_SWGO * "/Arrays/table_ID_and_positions_A1.parquet"
+
+df_ID = DataFrame(Parquet.Table(path_ID));
 dict_ID = Dict(row.ID => (row.x, row.y, row.z) for row in eachrow(df_ID));
 ##############################################################################################
 #Initialize the Files

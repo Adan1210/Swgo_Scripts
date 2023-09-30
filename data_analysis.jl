@@ -1,5 +1,5 @@
 #My functions
-module My_functions
+module DataAnalysis
 
 export flatten_to_level, replace_ID_with_coords
 
