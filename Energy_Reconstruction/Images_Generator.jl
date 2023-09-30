@@ -3,16 +3,17 @@ using .DataAnalysis: replace_ID_with_coords
 using  UnROOT, DataFrames, Base.Threads, CSV, Plots
 ##############################################################################################
 # Import the CSV file
-path_SWGO = pwd();
-path_ID_CSV = path_SWGO * "/Arrays/table_ID_and_positions_A1.csv";
+path_SWGO = dirname(pwd());
+path_ID_CSV = path_SWGO * "/Swgo_Scripts/Arrays/table_ID_and_positions_A1.csv";
 
 df_ID = CSV.read(path_ID_CSV, DataFrame);
 dict_ID = Dict(row.ID => (row.x, row.y, row.z) for row in eachrow(df_ID));
 ##############################################################################################
 #Initialize the Files
 path = [];
-list_files_values=[["DAT" * lpad(i, 6, '0'), j] for i in 1:5, j in 1:4];
-
+list_files_values=[["DAT" * lpad(i, 6, '0'), j] for i in 1:100, j in 0:4];
+##############################################################################################
+#Initialize the ROOT file
 main_list = [];
 for i in 1:length(list_files_values)
     # Create the names DAT000001, DAT000002, ...
@@ -44,97 +45,59 @@ end
 
 main_list
 
-i
-#j=length(main_list)
-#i=i+j
-E₀ = [];
-for list_of_lists in main_list
-    # Crear un diccionario para almacenar la frecuencia y el color de cada punto
-    point_dict = Dict()
-    E1₀ = Float64[];
-    for sublist in list_of_lists
-        E1₀= sublist[1]
-        x = sublist[2]
-        y = sublist[3]
-        e₀= sublist[4]
-        color_value = e₀/ 10  # Poner el color en un una escala de /10 GeV
-        point = (x, y)
-    
-        if haskey(point_dict, point)
-            # Si el punto ya existe en el diccionario, incrementar la frecuencia y acumular el valor de color
-            freq, color = point_dict[point]
-            point_dict[point] = (freq + 1, color + color_value)
-        else
-            # Si el punto no existe en el diccionario, inicializar la frecuencia y el valor de color
-            point_dict[point] = (1, color_value)
+function generate_scatter_plots(main_list, output_directory::String, number_shower::Int)
+    list_E₀ = []
+
+    for list_of_lists in main_list
+        point_dict = Dict()
+        E₀ = Float64[]
+        for sublist in list_of_lists
+            E₀ = sublist[1]
+            x   = sublist[2]
+            y   = sublist[3]
+            e₀  = sublist[4]
+            color_value = e₀ / 10
+            point = (x, y)
+        
+            if haskey(point_dict, point)
+                freq, color       = point_dict[point]
+                point_dict[point] = (freq + 1, color + color_value)
+            else
+                point_dict[point] = (1, color_value)
+            end
+        end
+        push!(list_E₀, E₀)
+        
+        list_x      = Float64[]
+        list_y      = Float64[]
+        list_colors = Float64[]
+        for ((xi, yi), (freq, color)) in point_dict
+            push!(list_x, xi)
+            push!(list_y, yi)
+            push!(list_colors, 1 - color)
+        end
+        
+        scatter(list_x, list_y, 
+        color=:grays, label=false, 
+        xlabel="x", ylabel="y", zcolor=list_colors, 
+        framestyle=:none, grid=false,
+        xlims=(-300, 300), ylims=(-300, 300), 
+        markersize=1.9, markerstrokewidth=0,
+        colorbar=false,
+        clims=(0,2), dpi=600)
+        
+        savefig(output_directory * "shower_$(number_shower).png")
+        number_shower += 1
+    end
+
+    open(path_SWGO * "/swgo_files/Images_ML/shower_list.txt", "w") do file
+        # Escribe cada elemento de la lista en una nueva línea del archivo
+        for elemento in list_E₀
+            write(file, "$elemento\n")
         end
     end
-    push!(E₀,E1₀)
-    # Extraer las columnas x, y y los colores
-    x = Float64[]
-    y = Float64[]
-    colors = Float64[]
-
-    for ((xi, yi), (freq, color)) in point_dict
-        push!(x, xi)
-        push!(y, yi)
-        push!(colors, 1-color)
-    end
-
-    #E₀ = replace(string(E₀), "." => "_")
-    # Crear el gráfico
-    scatter(x, y, 
-    color=:grays, label=false, 
-    xlabel="x", ylabel="y", zcolor=colors, 
-    framestyle=:none, grid=false,
-    xlims=(-300, 300), ylims=(-300, 300), 
-    markersize=1.9, markerstrokewidth=0,
-    colorbar = false,
-    clims=(0,2),dpi=600)
-    # Guardar el gráfico en un archivo SVG
-    savefig("/home/lmorales/swgo/swgo_files/Images_ML/shower_$(i).svg")
-    i=i+1
-end
-E₀
-open("/home/lmorales/swgo/swgo_files/Images_ML/shower_list.txt", "a") do file
-    # Escribe cada elemento de la lista en una nueva línea del archivo
-    for elemento in E₀
-        write(file, "$elemento\n")
-    end
+    return list_E₀
 end
 
-
-
-
-
-
-
-
-
-#DEBUGG
-f = UnROOT.ROOTFile("/home/lmorales/swgo/swgo_files/DATA_Colaboration/ROOT_Aerie/hawcsim-DAT000050_A1_gamma_1_50000.root");
-LazyTree(f ,"XCDF",["HAWCSim.Evt.Num"])
-
-f["XCDF"]["HAWCSim.Evt.Num"]
-mytree = LazyTree(f ,"XCDF",["HAWCSim.PE.PMTID","HAWCSim.Evt.Energy", "HAWCSim.PE.Energy"])
-
-list = []
-Threads.@threads for Tleaf in mytree # Tleaf[1]=PMTID, Tleaf[2]=Initial Energy, Tleaf[3]=Energy
-    if !isempty(Tleaf[1]) && Tleaf[2] > 200000
-        pmtID=Int64.(Tleaf[1])
-        Tbrunch = [ [Tleaf[2],i, j] for (i,j) in zip(Tleaf[1], Tleaf[3]) ]
-        push!(list, Tbrunch)
-    end
-end
-
-function replace_ID_with_coords(lst, dict_ID)
-    # Usar una comprensión de lista para reemplazar el ID solo con las coordenadas x,y
-    return [[sublst[1], dict_ID[sublst[2]][1], dict_ID[sublst[2]][2], sublst[3]] for sublst in lst]
-end
-
-temp_list = []
-Threads.@threads for sublist in list
-    push!(temp_list, replace_ID_with_coords(sublist, dict_ID))
-end
-list = temp_list;
-
+path = path_SWGO * "/swgo_files/Images_ML/"
+generate_scatter_plots(main_list, path, 1)
