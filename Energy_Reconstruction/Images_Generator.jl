@@ -11,7 +11,7 @@ dict_ID = Dict(row.ID => (row.x, row.y, row.z) for row in eachrow(df_ID));
 ##############################################################################################
 #Initialize the Files
 path = [];
-list_files_values=[["DAT" * lpad(i, 6, '0'), j] for i in 1:100, j in 0:4];
+list_files_values = [["DAT" * lpad(i, 6, '0'), j] for i in 49:51, j in 1:2 if !(i == 50 && j == 1)];
 ##############################################################################################
 #Initialize the ROOT file
 main_list = [];
@@ -21,26 +21,27 @@ for i in 1:length(list_files_values)
     YYY    = list_files_values[i][2]
     
     # Initialize the path
-    path = "/home/lmorales/swgo/swgo_files/ROOT_Aerie_C/hawcsim-$(DATXXX)_A1_gamma_$(YYY)_50000.root"
+    path = path_SWGO * "/swgo_files/ROOT_Aerie_C/hawcsim-$(DATXXX)_A1_gamma_$(YYY)_50000.root"
     
     # Initialize the ROOT file
     f = ROOTFile(path)
-
     mytree = LazyTree(f ,"XCDF",["HAWCSim.PE.PMTID","HAWCSim.Evt.Energy", "HAWCSim.PE.Energy"])
-    list = []
+
+    list_energies_ID = []
     Threads.@threads for Tleaf in mytree # Tleaf[1]=PMTID, Tleaf[2]=Initial Energy, Tleaf[3]=Energy
         if !isempty(Tleaf[1]) && Tleaf[2] > 250000
             pmtID=Int64.(Tleaf[1])
             Tbrunch = [ [Tleaf[2],i, j] for (i,j) in zip(Tleaf[1], Tleaf[3]) ]
-            push!(list, Tbrunch)
+            push!(list_energies_ID, Tbrunch)
         end
     end
-    temp_list = []
-    for sublist in list
-    push!(temp_list, replace_ID_with_coords(sublist, dict_ID))
+
+    list_energies_positions = []
+    for sublist in list_energies_ID
+    push!(list_energies_positions, replace_ID_with_coords(sublist, dict_ID))
     end
-    list = temp_list;
-    append!(main_list, list)
+
+    append!(main_list, list_energies_positions)
 end
 
 main_list
