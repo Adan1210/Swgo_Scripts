@@ -1,3 +1,2 @@
 # SWGO Scripts
-- Scripts for reconstruction of Energy in SWGO with Machine Learning.
-- Horna was here
+- Scripts for reconstruction of Energy in SWGO with Deep Learning using the data of SWGO's server, creating images and training a model to predict the energy of a given image.
