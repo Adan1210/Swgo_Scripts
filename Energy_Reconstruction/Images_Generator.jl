@@ -1,9 +1,9 @@
 include("../data_analysis.jl")
 using .DataAnalysis: replace_ID_with_coords
-using  UnROOT, DataFrames, Base.Threads, CSV, Plots
+using  UnROOT, DataFrames, Base.Threads, CSV, Plots, Base.Filesystem
 ##############################################################################################
 # Import the CSV file
-path_SWGO = dirname(pwd());
+path_SWGO = dirname(pwd())
 path_ID_CSV = path_SWGO * "/Swgo_Scripts/Arrays/table_ID_and_positions_A1.csv";
 
 df_ID = CSV.read(path_ID_CSV, DataFrame);
@@ -11,7 +11,7 @@ dict_ID = Dict(row.ID => (row.x, row.y, row.z) for row in eachrow(df_ID));
 ##############################################################################################
 #Initialize the Files
 path = [];
-list_files_values = [["DAT" * lpad(i, 6, '0'), j] for i in 1:100, j in 0:4 if !(i == 50 && j == 1)];
+list_files_values = [["DAT" * lpad(i, 6, '0'), j] for i in 1:1, j in 1:1 if !(i == 50 && j == 1)];
 ##############################################################################################
 #Initialize the ROOT file
 main_list = [];
@@ -94,7 +94,7 @@ function generate_scatter_plots(main_list, output_directory::String, number_show
         clims=(0,1), 
         size =(1200,1200), dpi =600);
         
-        savefig(output_directory * "shower_$(number_shower).png");
+        savefig(output_directory * "/shower_$(number_shower).png");
         number_shower += 1
     end
     # Write in a txt file
@@ -104,7 +104,10 @@ function generate_scatter_plots(main_list, output_directory::String, number_show
     "max_energy_total_Tank" => list_max_energy_total_Tank
     )
     df = DataFrame(data)
-    CSV.write(path_SWGO * "/swgo_files/Images_ML/data.csv", df)
+    CSV.write(output_directory * "/data.csv", df)
 end
 ##############################################################################################
-generate_scatter_plots(main_list, path_SWGO * "/swgo_files/Images_ML/", 1)
+path_images = dirname(dirname(path_SWGO)) * "/rhorna/imagenes/images_luis"
+shower_initial = length(readdir(path_images)) == 0 ? 1 : length(readdir(path_images))
+generate_scatter_plots(main_list, path_images, shower_initial)
+##############################################################################################
