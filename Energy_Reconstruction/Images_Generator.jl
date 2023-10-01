@@ -45,13 +45,11 @@ for i in 1:length(list_files_values)
 end
 
 main_list= main_list[9:10]
-main_list
-
-
+##############################################################################################
+list_max_energy_total_Tank = []
 list_n_pmt = []
-list_max_e₀ = []
+list_E₀ = []
 function generate_scatter_plots(main_list, output_directory::String, number_shower::Int)
-    list_E₀ = []
     for list_of_lists in main_list
         point_dict = Dict()
         E₀ = Float64[]
@@ -84,7 +82,7 @@ function generate_scatter_plots(main_list, output_directory::String, number_show
         
         max_energy_total_PMT = maximum(list_energy_total_PMT)
         n_pmt = sum(list_freq)
-        push!(list_max_energy_total_PMT, max_energy_total_PMT)
+        push!(list_max_energy_total_Tank, max_energy_total_PMT)
         push!(list_n_pmt, n_pmt)
 
         list_energy_total_PMT_normalice = list_energy_total_PMT ./ max_energy_total_PMT
@@ -101,80 +99,13 @@ function generate_scatter_plots(main_list, output_directory::String, number_show
         savefig(output_directory * "shower_$(number_shower).png");
         number_shower += 1
     end
-# Write the list of Initial Energies in a txt file
-    open(path_SWGO * "/swgo_files/Images_ML/shower_list.txt", "w") do file
-    # Escribe cada elemento de la lista en una nueva línea del archivo
-    for elemento in list_E₀
-        write(file, "$elemento\n")
-    end
-    end
-    return list_E₀
+    # Write in a txt file
+    data = Dict(
+    "E₀" => list_E₀,
+    "n_pmt" => list_n_pmt,
+    "max_energy_total_Tank" => list_max_energy_total_Tank
+    )
+    df = DataFrame(data)
+    CSV.write(path_SWGO * "/swgo_files/Images_ML/data.csv", df)
 end
-
-path = path_SWGO * "/swgo_files/Images_ML/"
-generate_scatter_plots(main_list, path, 1)
-
-list_max_e₀
-
-
-
-
-
-
-
-
-
-function generate_scatter_plots(main_list, output_directory::String, number_shower::Int)    
-    list_E₀ = []
-    for list_of_lists in main_list
-        point_dict = Dict()
-        E₀ = Float64[]
-        for sublist in list_of_lists
-            E₀  = sublist[1]
-            x   = sublist[2]
-            y   = sublist[3]
-            e₀  = sublist[4]
-            color_value = e₀ / 10
-            point = (x, y)
-        
-            if haskey(point_dict, point)
-                freq, color       = point_dict[point]
-                point_dict[point] = (freq + 1, color + color_value)
-            else
-                point_dict[point] = (1, color_value)
-            end
-        end
-        push!(list_E₀, E₀)
-        
-        list_x      = Float64[]
-        list_y      = Float64[]
-        list_colors = Float64[]
-        for ((xi, yi), (freq, color)) in point_dict
-            push!(list_x, xi)
-            push!(list_y, yi)
-            push!(list_colors, 1 - color)
-        end
-        
-        scatter(list_x, list_y, 
-        color=:grays, label=false, 
-        xlabel="x", ylabel="y", zcolor=list_colors, 
-        framestyle=:none, grid=false,
-        xlims=(-300, 300), ylims=(-300, 300), 
-        markersize=1.9, markerstrokewidth=0,
-        colorbar=false,
-        clims=(0,2), dpi=600);
-        
-        savefig(output_directory * "shower_$(number_shower).png");
-        number_shower += 1
-    end
-# Write the list of Initial Energies in a txt file
-    open(path_SWGO * "/swgo_files/Images_ML/shower_list.txt", "w") do file
-        # Escribe cada elemento de la lista en una nueva línea del archivo
-        for elemento in list_E₀
-            write(file, "$elemento\n")
-        end
-    end
-end
-
-path = path_SWGO * "/swgo_files/Images_ML/"
-generate_scatter_plots(main_list, path, 1)
+##############################################################################################
