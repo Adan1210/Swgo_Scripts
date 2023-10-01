@@ -11,7 +11,7 @@ dict_ID = Dict(row.ID => (row.x, row.y, row.z) for row in eachrow(df_ID));
 ##############################################################################################
 #Initialize the Files
 path = [];
-list_files_values = [["DAT" * lpad(i, 6, '0'), j] for i in 1:1, j in 1:1 if !(i == 50 && j == 1)];
+list_files_values = [["DAT" * lpad(i, 6, '0'), j] for i in 1:100, j in 0:4 if !(i == 50 && j == 1)];
 ##############################################################################################
 #Initialize the ROOT file
 main_list = [];
@@ -43,8 +43,6 @@ for i in 1:length(list_files_values)
 
     append!(main_list, list_energies_positions)
 end
-
-main_list= main_list[9:10]
 ##############################################################################################
 list_max_energy_total_Tank = []
 list_n_pmt = []
@@ -92,7 +90,7 @@ function generate_scatter_plots(main_list, output_directory::String, number_show
         framestyle=:none, grid=false,
         xlims=(-300, 300), ylims=(-300, 300), 
         markersize=1.9, markerstrokewidth=0,
-        colorbar=true,
+        #colorbar=true,
         clims=(0,1), 
         size =(1200,1200), dpi =600);
         
