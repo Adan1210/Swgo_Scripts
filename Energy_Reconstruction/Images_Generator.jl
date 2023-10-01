@@ -90,7 +90,7 @@ function generate_scatter_plots(main_list, output_directory::String, number_show
         framestyle=:none, grid=false,
         xlims=(-300, 300), ylims=(-300, 300), 
         markersize=1.9, markerstrokewidth=0,
-        #colorbar=true,
+        colorbar=false,
         clims=(0,1), 
         size =(1200,1200), dpi =600);
         
@@ -107,3 +107,4 @@ function generate_scatter_plots(main_list, output_directory::String, number_show
     CSV.write(path_SWGO * "/swgo_files/Images_ML/data.csv", df)
 end
 ##############################################################################################
+generate_scatter_plots(main_list, path_SWGO * "/swgo_files/Images_ML/", 1)
