@@ -47,6 +47,7 @@ end
 list_max_energy_total_Tank = [];
 list_n_pmt = [];
 list_E₀ = [];
+# The function generate_scatter_plots() create the plots of all 🚿 simulated with energy >25TeV, and obtain the lists: max energy detected in a tank, number of pmts of defected per shower simulated, and the energy of the particle primary  per shower 🚿.
 function generate_scatter_plots(main_list, output_directory::String, number_shower::Int)
     for list_of_lists in main_list
         point_dict = Dict()
@@ -107,7 +108,10 @@ function generate_scatter_plots(main_list, output_directory::String, number_show
     CSV.write(output_directory * "/data.csv", df)
 end
 ##############################################################################################
+# This is just the path where the plots will be generated.
 path_images = dirname(dirname(path_SWGO)) * "/rhorna/imagenes/images_luis"
+# This the number of the first shower (it's just a label
 shower_initial = length(readdir(path_images)) == 0 ? 1 : length(readdir(path_images))
+#Finally we generate the plots and a CSV where the list are almacenated.
 generate_scatter_plots(main_list, path_images, shower_initial)
 ##############################################################################################
