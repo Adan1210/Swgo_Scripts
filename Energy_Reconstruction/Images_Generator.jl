@@ -2,18 +2,18 @@ include("../data_analysis.jl")
 using .DataAnalysis: replace_ID_with_coords
 using  UnROOT, DataFrames, Base.Threads, CSV, Plots, Base.Filesystem
 ##############################################################################################
-# Import the CSV file
+# Import the CSV file with the ID and Positions pf the PMT's.
 path_SWGO = dirname(pwd())
 path_ID_CSV = path_SWGO * "/Swgo_Scripts/Arrays/table_ID_and_positions_A1.csv";
 
 df_ID = CSV.read(path_ID_CSV, DataFrame);
 dict_ID = Dict(row.ID => (row.x, row.y, row.z) for row in eachrow(df_ID));
 ##############################################################################################
-#Initialize the Files
+# Initialice the names of all ROOT Files to work.
 path = [];
 list_files_values = [["DAT" * lpad(i, 6, '0'), j] for i in 1:100, j in 0:4 if !(i == 50 && j == 1)];
 ##############################################################################################
-#Initialize the ROOT file
+#Create the main_list, that list contain the data for work and have the form:
 main_list = [];
 for i in 1:length(list_files_values)
     # Create the names DAT000001, DAT000002, ...
