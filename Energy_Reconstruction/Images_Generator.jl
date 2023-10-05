@@ -2,18 +2,18 @@ include("../data_analysis.jl")
 using .DataAnalysis: replace_ID_with_coords
 using  UnROOT, DataFrames, Base.Threads, CSV, Plots, Base.Filesystem
 ##############################################################################################
-# Import the CSV file
+# Import the CSV file with the ID and Positions pf the PMT's.
 path_SWGO = dirname(pwd())
 path_ID_CSV = path_SWGO * "/Swgo_Scripts/Arrays/table_ID_and_positions_A1.csv";
 
 df_ID = CSV.read(path_ID_CSV, DataFrame);
 dict_ID = Dict(row.ID => (row.x, row.y, row.z) for row in eachrow(df_ID));
 ##############################################################################################
-#Initialize the Files
+# Initialice the names of all ROOT Files to work.
 path = [];
 list_files_values = [["DAT" * lpad(i, 6, '0'), j] for i in 1:1, j in 0:0 if !(i == 50 && j == 1)];
 ##############################################################################################
-#Initialize the ROOT file
+#Create the main_list, that list contain the data for work and have the form:
 main_list = [];
 for i in 1:length(list_files_values)
     # Create the names DAT000001, DAT000002, ...
@@ -47,6 +47,7 @@ end
 list_max_energy_total_Tank = [];
 list_n_pmt = [];
 list_E₀ = [];
+# The function generate_scatter_plots() create the plots of all 🚿 simulated with energy >25TeV, and obtain the lists: max energy detected in a tank, number of pmts of defected per shower simulated, and the energy of the particle primary  per shower 🚿.
 function generate_scatter_plots(main_list, output_directory::String, number_shower::Int)
     for list_of_lists in main_list
         point_dict = Dict()
@@ -107,7 +108,10 @@ function generate_scatter_plots(main_list, output_directory::String, number_show
     CSV.write(output_directory * "/data.csv", df)
 end
 ##############################################################################################
+# This is just the path where the plots will be generated.
 path_images = dirname(dirname(path_SWGO)) * "/rhorna/imagenes/images_luis"
+# This the number of the first shower (it's just a label
 shower_initial = length(readdir(path_images)) == 0 ? 1 : length(readdir(path_images))
+#Finally we generate the plots and a CSV where the list are almacenated.
 generate_scatter_plots(main_list, path_images, shower_initial)
 ##############################################################################################
