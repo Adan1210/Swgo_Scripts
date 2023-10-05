@@ -15,6 +15,7 @@ list_files_values = [["DAT" * lpad(i, 6, '0'), j] for i in 1:1, j in 0:0 if !(i 
 ##############################################################################################
 #Create the main_list, that list contain the data for work and have the form:
 main_list = [];
+#Initialize the ROOT file and almacenated in the main_list.
 for i in 1:length(list_files_values)
     # Create the names DAT000001, DAT000002, ...
     DATXXX = list_files_values[i][1] 
@@ -110,7 +111,7 @@ end
 ##############################################################################################
 # This is just the path where the plots will be generated.
 path_images = dirname(dirname(path_SWGO)) * "/rhorna/imagenes/images_luis"
-# This the number of the first shower (it's just a label
+# This the number of the first shower (it's just a label).
 shower_initial = length(readdir(path_images)) == 0 ? 1 : length(readdir(path_images))
 #Finally we generate the plots and a CSV where the list are almacenated.
 generate_scatter_plots(main_list, path_images, shower_initial)
