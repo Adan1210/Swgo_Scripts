@@ -86,6 +86,8 @@ function generate_scatter_plots(main_list, output_directory::String, number_show
         push!(list_n_pmt, n_pmt)
 
         list_energy_total_PMT_normalice = list_energy_total_PMT ./ max_energy_total_PMT
+
+        # Plot
         scatter(list_x, list_y, 
         color=:grays, label=false, 
         zcolor=list_energy_total_PMT_normalice, 
