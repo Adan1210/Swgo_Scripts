@@ -11,7 +11,7 @@ dict_ID = Dict(row.ID => (row.x, row.y, row.z) for row in eachrow(df_ID));
 ##############################################################################################
 #Initialize the Files
 path = [];
-list_files_values = [["DAT" * lpad(i, 6, '0'), j] for i in 1:100, j in 0:4 if !(i == 50 && j == 1)];
+list_files_values = [["DAT" * lpad(i, 6, '0'), j] for i in 1:1, j in 0:0 if !(i == 50 && j == 1)];
 ##############################################################################################
 #Initialize the ROOT file
 main_list = [];
