@@ -16,7 +16,7 @@ list_files_values = [["DAT" * lpad(i, 6, '0'), j] for i in 1:1, j in 0:0 if !(i 
 #Create the main_list, that list contain the data for work and have the form:
 main_list = [];
 #Initialize the ROOT file and almacenated in the main_list.
-for i in 1:length(list_files_values)
+for i in 1:eachindex(list_files_values)
     # Create the names DAT000001, DAT000002, ...
     DATXXX = list_files_values[i][1] 
     YYY    = list_files_values[i][2]
