@@ -57,8 +57,6 @@ end
 # Calculate the energy bias
 list_energy_bias   = map(mean,[list_log10_prim_energy[x] .- list_log10_rec_energy[x] for x in collect(1:length(list_log10_rec_energy))])
 
-# Plot size
-font = Plots.font("Times New Roman",10)
 # Plot
 plot(
     list_energies, xaxis=:log, 
@@ -77,9 +75,9 @@ plot(
     linestyle=:solid, linewidth=1.5,                               #type of line
     marker=:circle, markercolor=:red, markersize=3,                #marker and size
     markerstrokecolor=:black, markerstrokewidth=0.5,               #contour of the marker
-    titlefont=font,
-    guidefont=font,
-    legendfont=font,
+    titlefont=font("Times New Roman",10),
+    guidefont=font("Times New Roman",10),
+    legendfont=font("Times New Roman",10),
     dpi=500)                                                                  #resolution for the figure
 # Save the figure
 file_name = "/home/lmorales/swgo/swgo_scripts/swgo_plots/energy_bias.svg"
@@ -95,8 +93,7 @@ function calculate_rms(vector)
     return rms
 end
 list_energy_resolution = map(calculate_rms,[list_log10_prim_energy[x] .- list_log10_rec_energy[x] for x in collect(1:length(list_log10_rec_energy))])
-# Plot size
-font = Plots.font("Times New Roman",10)
+
 # Plot
 plot(
     list_energies, xaxis=:log, 
@@ -115,9 +112,9 @@ plot(
     linestyle=:solid, linewidth=1.5,                                       #type of line
     marker=:circle, markercolor=:red, markersize=3,                        #marker and size
     markerstrokecolor=:black, markerstrokewidth=0.5,                       #contour of the marker
-    titlefont=font,
-    guidefont=font,
-    legendfont=font,
+    titlefont=font("Times New Roman",10),
+    guidefont=font("Times New Roman",10),
+    legendfont=font("Times New Roman",10),
     dpi=500)                                                                                     #resolution for the figure
 # Save the figure
 file_name = "/home/lmorales/swgo/swgo_scripts/swgo_plots/energy_resolution.svg"
