@@ -11,12 +11,12 @@ dict_ID = Dict(row.ID => (row.x, row.y, row.z) for row in eachrow(df_ID));
 ##############################################################################################
 # Initialice the names of all ROOT Files to work.
 path = [];
-list_files_values = [["DAT" * lpad(i, 6, '0'), j] for i in 1:1, j in 0:0 if !(i == 50 && j == 1)];
+list_files_values = [["DAT" * lpad(i, 6, '0'), j] for i in 1:2, j in 0:0 if !(i == 50 && j == 1)];
 ##############################################################################################
 #Create the main_list, that list contain the data for work and have the form:
 main_list = [];
 #Initialize the ROOT file and almacenated in the main_list.
-for i in 1:eachindex(list_files_values)
+for i in eachindex(list_files_values)
     # Create the names DAT000001, DAT000002, ...
     DATXXX = list_files_values[i][1] 
     YYY    = list_files_values[i][2]
@@ -49,6 +49,56 @@ list_max_energy_total_Tank = [];
 list_n_pmt = [];
 list_E₀ = [];
 # The function generate_scatter_plots() create the plots of all 🚿 simulated with energy >25TeV, and obtain the lists: max energy detected in a tank, number of pmts of defected per shower simulated, and the energy of the particle primary  per shower 🚿.
+using Plots
+using Images
+using Colors
+using Base.Threads
+
+function create_pixelated_image(data, idx)
+    zeros_mat = zeros(Float64, 600, 600)
+    
+    # Crear un diccionario para almacenar la suma de energías para coordenadas repetidas
+    energy_dict = Dict{Tuple{Int, Int}, Float64}()
+
+    for entry in data
+        # Obtener la energía y coordenadas
+        energy = entry[4]
+        x = floor(Int, entry[2]) + 300
+        y = floor(Int, entry[3]) + 300
+
+        # Si las coordenadas ya existen en el diccionario, sumar la energía
+        # De lo contrario, agregarlas al diccionario con la energía actual
+        energy_dict[(x,y)] = get(energy_dict, (x,y), 0.0) + energy
+    end
+    
+    # Transferir las sumas de energía del diccionario a la matriz
+    for ((x, y), energy) in energy_dict
+        zeros_mat[x, y] = energy
+    end
+
+    # Normalizar según la energía máxima acumulada y luego invertir colores
+    zeros_mat ./= maximum(zeros_mat)
+    zeros_mat = 1.0 .- zeros_mat
+
+    # This is just the path where the plots will be generated.
+    file_name = dirname(dirname(path_SWGO)) * "/rhorna/imagenes/images_luis2/image_$(idx).png"
+    img = Gray.(zeros_mat)
+    save(file_name, img)
+end
+
+function create_images(data_list_of_lists)
+    n = length(data_list_of_lists)
+    
+    Threads.@threads for i in 1:n
+        create_pixelated_image(data_list_of_lists[i], i)
+    end
+end
+
+
+create_images(main_list)
+
+
+
 function generate_scatter_plots(main_list, output_directory::String, number_shower::Int)
     for list_of_lists in main_list
         point_dict = Dict()
