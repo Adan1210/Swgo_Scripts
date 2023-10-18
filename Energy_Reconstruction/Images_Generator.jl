@@ -11,7 +11,7 @@ dict_ID = Dict(row.ID => (row.x, row.y, row.z) for row in eachrow(df_ID));
 ##############################################################################################
 # Initialice the names of all ROOT Files to work.
 path = [];
-list_files_values = [["DAT" * lpad(i, 6, '0'), j] for i in 1:1, j in 0:4 if !(i == 50 && j == 1)];
+list_files_values = [["DAT" * lpad(i, 6, '0'), j] for i in 1:100, j in 0:4 if !(i == 50 && j == 1)];
 ##############################################################################################
 #Create the main_list, that list contain the data for work and have the form:
 main_list = [];
@@ -30,7 +30,7 @@ for i in eachindex(list_files_values)
 
     list_energies_ID = []
     Threads.@threads for Tleaf in mytree # Tleaf[1]=PMTID, Tleaf[2]=Initial Energy, Tleaf[3]=Energy
-        if !isempty(Tleaf[1]) && Tleaf[2] > 500000
+        if !isempty(Tleaf[1]) && Tleaf[2] > 300000
             pmtID=Int64.(Tleaf[1])
             Tbrunch = [ [Tleaf[2],i, j] for (i,j) in zip(Tleaf[1], Tleaf[3]) ]
             push!(list_energies_ID, Tbrunch)
@@ -53,31 +53,35 @@ using Plots
 using Images
 using Colors
 using Base.Threads
-
+list_E₀= []
+E_max_normaliced = []
 function create_pixelated_image(data, idx)
-    zeros_mat = zeros(Float64, 100, 100)
+    zeros_mat = zeros(Float64, 600, 600)
     
     # Crear un diccionario para almacenar la suma de energías para coordenadas repetidas
     energy_dict = Dict{Tuple{Int, Int}, Float64}()
-
+    E₀ = Float64[]
     for entry in data
         # Obtener la energía y coordenadas
         energy = entry[4]
-        x = floor(Int, entry[2]/6) + 50
-        y = floor(Int, entry[3]/6)+ 50
+        x = floor(Int, entry[2]/1) + 300
+        y = floor(Int, entry[3]/1) + 300
 
         # Si las coordenadas ya existen en el diccionario, sumar la energía
         # De lo contrario, agregarlas al diccionario con la energía actual
         energy_dict[(x,y)] = get(energy_dict, (x,y), 0.0) + energy
+        E₀ = entry[1]
     end
     
     # Transferir las sumas de energía del diccionario a la matriz
     for ((x, y), energy) in energy_dict
         zeros_mat[x, y] = energy
     end
-
+    a = maximum(zeros_mat)
+    push!(E_max_normaliced, a)
+    push!(list_E₀, E₀)
     # Normalizar según la energía máxima acumulada
-    zeros_mat ./= maximum(zeros_mat)
+    zeros_mat ./= a
     zeros_mat = 1.0 .- zeros_mat
     # This is just the path where the plots will be generated.
     file_name = dirname(dirname(path_SWGO)) * "/rhorna/imagenes/images_luis2/image_$(idx).png"
@@ -91,6 +95,13 @@ function create_images(data_list_of_lists)
     for i in 1:n
         create_pixelated_image(data_list_of_lists[i], i)
     end
+    # Write in a txt file
+    data2 = Dict(
+    "E₀" => list_E₀,
+    "E_max_normaliced" => E_max_normaliced
+    )
+    df = DataFrame(data2)
+    CSV.write(dirname(dirname(path_SWGO)) * "/rhorna/imagenes/images_luis2/data.txt", df)
 end
 
 main_list
