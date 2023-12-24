@@ -9,9 +9,19 @@ path_ID_CSV = path_SWGO * "/Swgo_Scripts/Arrays/table_ID_and_positions_A1.csv";
 df_ID = CSV.read(path_ID_CSV, DataFrame);
 dict_ID = Dict(row.ID => (row.x, row.y, row.z) for row in eachrow(df_ID));
 ##############################################################################################
+# Files doesn't work
+path_filter = path_SWGO * "/swgo-aerie/missing_files.txt";  # Reemplaza esto con la ruta real
+excluded_pairs = Set();
+open(path_filter, "r") do file
+    for line in eachline(file)
+        i, j = parse.(Int, split(line))
+        push!(excluded_pairs, (i, j))
+    end
+end
+##############################################################################################
 # Initialice the names of all ROOT Files to work.
 path = [];
-list_files_values = [["DAT" * lpad(i, 6, '0'), j] for i in 1:100, j in 0:4 if !(i == 50 && j == 1)];
+list_files_values = [["DAT" * lpad(i, 6, '0'), j] for i in 501:517, j in 0:4 if !((i, j) in excluded_pairs)]; #aun no compilo esto, se quedo en 517
 ##############################################################################################
 #Create the main_list, that list contain the data for work and have the form:
 main_list = [];
@@ -49,12 +59,11 @@ list_max_energy_total_Tank = [];
 list_n_pmt = [];
 list_E₀ = [];
 # The function generate_scatter_plots() create the plots of all 🚿 simulated with energy >25TeV, and obtain the lists: max energy detected in a tank, number of pmts of defected per shower simulated, and the energy of the particle primary  per shower 🚿.
-using Plots
-using Images
-using Colors
-using Base.Threads
+using Images, Colors
+
 list_E₀= []
 E_max_normaliced = []
+
 function create_pixelated_image(data, idx)
     zeros_mat = zeros(Float64, 600, 600)
     
@@ -101,13 +110,10 @@ function create_images(data_list_of_lists)
     "E_max_normaliced" => E_max_normaliced
     )
     df = DataFrame(data2)
-    CSV.write(dirname(dirname(path_SWGO)) * "/rhorna/imagenes/images_luis2/data.txt", df)
+    CSV.write(dirname(dirname(path_SWGO)) * "/rhorna/imagenes/imagenes_luis_f/data.txt", df)
 end
 
 main_list
-create_images(main_list)
-
-
 
 function generate_scatter_plots(main_list, output_directory::String, number_shower::Int)
     for list_of_lists in main_list
@@ -168,11 +174,11 @@ function generate_scatter_plots(main_list, output_directory::String, number_show
     "max_energy_total_Tank" => list_max_energy_total_Tank
     )
     df = DataFrame(data)
-    CSV.write(output_directory * "/data.csv", df)
+    CSV.write(output_directory * "/data2.csv", df)
 end
 ##############################################################################################
 # This is just the path where the plots will be generated.
-path_images = dirname(dirname(path_SWGO)) * "/rhorna/imagenes/images_luis"
+path_images = dirname(dirname(path_SWGO)) * "/rhorna/imagenes/imagenes_luis_f"
 # This the number of the first shower (it's just a label).
 shower_initial = length(readdir(path_images)) == 0 ? 1 : length(readdir(path_images))
 #Finally we generate the plots and a CSV where the list are almacenated.
