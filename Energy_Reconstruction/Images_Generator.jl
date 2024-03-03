@@ -10,7 +10,7 @@ df_ID = CSV.read(path_ID_CSV, DataFrame);
 dict_ID = Dict(row.ID => (row.x, row.y, row.z) for row in eachrow(df_ID));
 ##############################################################################################
 # Files doesn't work
-path_filter = path_SWGO * "/swgo-aerie/missing_files.txt";  # Reemplaza esto con la ruta real
+path_filter = path_SWGO * "/swgo_files/ROOT_Aerie_C/missing_files.txt";  # Reemplaza esto con la ruta real
 excluded_pairs = Set();
 open(path_filter, "r") do file
     for line in eachline(file)

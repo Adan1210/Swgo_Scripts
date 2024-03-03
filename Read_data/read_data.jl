@@ -3,7 +3,7 @@ using  UnROOT, DataFrames, Base.Threads, Plots, Base.Filesystem
 path_SWGO = dirname(pwd())
 ##############################################################################################
 # Files doesn't work
-path_filter = path_SWGO * "/swgo-aerie/missing_files.txt";  # Reemplaza esto con la ruta real
+path_filter = path_SWGO * "/swgo_files/ROOT_Aerie_C/missing_files.txt";  # Reemplaza esto con la ruta real
 excluded_pairs = Set();
 open(path_filter, "r") do file
     for line in eachline(file)
