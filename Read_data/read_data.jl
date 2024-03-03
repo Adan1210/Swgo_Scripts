@@ -1,5 +1,3 @@
-include("../data_analysis.jl")
-using .DataAnalysis: replace_ID_with_coords
 using  UnROOT, DataFrames, Base.Threads, Plots, Base.Filesystem
 ##############################################################################################
 path_SWGO = dirname(pwd())
@@ -35,7 +33,7 @@ for i in eachindex(list_files_values)
     main_list = [];
 
     Threads.@threads for Tleaf in mytree 
-        Tbrunch = hcat(Tleaf[1], Tleaf[2])
+        Tbrunch = hcat(Tleaf[1]/100, Tleaf[2]/100)
         push!(main_list, Tbrunch)
     end
     main_list_1 = []
@@ -43,7 +41,9 @@ for i in eachindex(list_files_values)
     push!(list_positions_rᵢ, main_list_1)
 end
 list_positions_rᵢ
-###########################################################################################
+
+
+#######################################################################################
 using Optim
 
 function Sᵢ(A, σ, x, xᵢ, N, Rₘ)
@@ -53,7 +53,7 @@ end
 Rₘ=120
 N=5*10^-5
 σ=10
-xᵢ=2
+xᵢ=list_positions_rᵢ[10][1][1][1]
 
 # Definimos la función objetivo, que depende solo de las variables que queremos optimizar
 function objective_function(params)
@@ -65,13 +65,13 @@ end
 initial_guess = [1.0, 1.0];
 
 # Realizamos la optimización utilizando el descenso de gradiente
-result = optimize(objective_function, initial_guess, GradientDescent());
+result = optimize(objective_function, initial_guess, LBFGS());
 
 # Obtenemos los valores que minimizan la función
 optimal_params = Optim.minimizer(result);
 
-println("El valor óptimo de x_core es: ", optimal_params[1])
-println("El valor óptimo de σ es: ", optimal_params[2])
+println("El valor óptimo de A es: ", optimal_params[1])
+println("El valor óptimo de x es: ", optimal_params[2])
 
 
 
@@ -94,7 +94,7 @@ println("El valor óptimo de σ es: ", optimal_params[2])
 #Create the main_list, that list contain the data for work and have the form:
 main_list = [];
 # Initialize the path
-path = path_SWGO * "/swgo_files/ROOT_Aerie_C/hawcsim-DAT000001_A1_gamma_1_50000.root"
+path = path_SWGO * "/swgo_files/ee.root"
 f = ROOTFile(path)
 # Give the names of variables of the files
 names1 = names(LazyTree(f, "XCDF"))
