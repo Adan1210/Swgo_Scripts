@@ -89,7 +89,7 @@ println("El valor óptimo de x es: ", optimal_params[2])
 
 
 
-######################## DEBUG ########################################
+######################## SEE THE Variables of one file ########################################
 ###########################################################################################
 #Create the main_list, that list contain the data for work and have the form:
 main_list = [];
