@@ -2,19 +2,19 @@ using  UnROOT, DataFrames, Base.Threads, Plots, Base.Filesystem
 ##############################################################################################
 path_SWGO = dirname(pwd())
 ##############################################################################################
-# Files doesn't work
-path_filter = path_SWGO * "/swgo_files/ROOT_Aerie_C/missing_files.txt";  # Reemplaza esto con la ruta real
-excluded_pairs = Set();
-open(path_filter, "r") do file
-    for line in eachline(file)
-        i, j = parse.(Int, split(line))
-        push!(excluded_pairs, (i, j))
-    end
-end
+# # Files doesn't work
+# path_filter = path_SWGO * "/swgo_files/ROOT_Aerie_C/missing_files.txt";  # Reemplaza esto con la ruta real
+# excluded_pairs = Set();
+# open(path_filter, "r") do file
+#     for line in eachline(file)
+#         i, j = parse.(Int, split(line))
+#         push!(excluded_pairs, (i, j))
+#     end
+# end
 ###########################################################################################
 # Initialice the names of all ROOT Files to work.
 path = [];
-list_files_values = [["DAT" * lpad(i, 6, '0'), j] for i in 1:2, j in 0:4 if !((i, j) in excluded_pairs)]; 
+list_files_values = [["DAT" * lpad(i, 6, '0'), j] for i in 1:1, j in 0:0 if !((i, j) in excluded_pairs)]; 
 ###########################################################################################
 #Create the main_list, that list contain the data for work and have the form:
 list_positions_rᵢ = [];
@@ -89,7 +89,7 @@ println("El valor óptimo de x es: ", optimal_params[2])
 
 
 
-
+######################## DEBUG ########################################
 ###########################################################################################
 #Create the main_list, that list contain the data for work and have the form:
 main_list = [];
@@ -98,30 +98,7 @@ path = path_SWGO * "/swgo_files/ee.root"
 f = ROOTFile(path)
 # Give the names of variables of the files
 names1 = names(LazyTree(f, "XCDF"))
+names1[1]
 
-mytree = LazyTree(f ,"XCDF",["HAWCSim.Evt.X","HAWCSim.Evt.Y"])
-
-
-list_energies_ID = []
-Threads.@threads for Tleaf in mytree 
-    Tbrunch = hcat(Tleaf[1], Tleaf[2])
-    push!(list_energies_ID, Tbrunch)
-end
-
-list_energies_ID
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+using CSV
+CSV.write("names_variables.csv", DataFrame(Column1=names1), header=false)
