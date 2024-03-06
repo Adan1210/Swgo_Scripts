@@ -73,4 +73,13 @@ nohup: ignoring input
   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0 15 8742k   15 1319k    0     0  1329k      0  0:00:06 --:--:--  0:00:06 1328k 54 8742k   54 4769k    0     0  2417k      0  0:00:03  0:00:01  0:00:02 2417k100 8742k  100 8742k    0     0  3138k      0  0:00:02  0:00:02 --:--:-- 3139k
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  7 6023k    7  438k    0     0   644k      0  0:00:09 --:--:--  0:00:09  644k 66 6023k   66 4014k    0     0  2380k      0  0:00:02  0:00:01  0:00:01 2380k100 6023k  100 6023k    0     0  2830k      0  0:00:02  0:00:02 --:--:-- 2830k
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0 40 4700k   40 1890k    0     0  1769k      0  0:00:02  0:00:01  0:00:01 1768k100 4700k  100 4700k    0     0  2775k      0  0:00:01  0:00:01 --:--:-- 2775k
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0 19 6665k   19 1279k    0     0  1438k      0  0:00:04 --:--:--  0:00:04 1437k 78 6665k   78 5254k    0     0  2825k      0  0:00:02  0:00:01  0:00:01 2824k100 6665k  100 6665k    0     0  3136k      0  0:00:02  0:00:02 --:--:-- 3138k
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0 4745k    0 17130    0     0  57266      0  0:01:24 --:--:--  0:01:24 57100
