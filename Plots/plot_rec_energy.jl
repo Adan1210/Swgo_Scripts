@@ -4,8 +4,7 @@ path_SWGO = dirname(pwd())
 ###########################################################################################
 # Initialice the names of all ROOT Files to work.
 path = [];
-excluded_pairs = Set();
-list_files_values = [["DAT" * lpad(i, 6, '0'), j] for i in 1:1, j in 0:4 if !((i, j) in excluded_pairs)];
+list_files_values = [["DAT" * lpad(i, 6, '0'), j] for i in 1:4000, j in 0:4];
 ###########################################################################################
 #Create the main_list, that list contain the data for work and have the form:
 list_positions_rᵢ = [];
@@ -18,16 +17,23 @@ for i in eachindex(list_files_values)
     # Initialize the path
     path = path_SWGO * "/swgo_files/ROOT_rec_Aerie_C/reco-$(DATXXX)_A1_gamma_$(YYY)_50000.root"
     # Initialize the ROOT file
-    f = ROOTFile(path)
-    mytree = LazyTree(f ,"XCDF",["SimEvent.energyTrue","rec.coreX","rec.coreY"])
-    main_list = [];
+    try
+        f = ROOTFile(path)
+        mytree = LazyTree(f ,"XCDF",["mc.logEnergy","rec.coreX","rec.coreY"])
+        main_list = [];
 
-    for Tleaf in mytree
-        element = [Tleaf[1],Tleaf[2]/100, Tleaf[3]/100]
-        push!(main_list, element)
+        for Tleaf in mytree
+            true_energy = Tleaf[1]
+            if true_energy > 10^3
+                element = [true_energy,Tleaf[2]/100, Tleaf[3]/100]
+                push!(main_list, element)
+            end
+
+        end
+
+        append!(list_positions_rᵢ, main_list)
+    catch e
     end
-
-    append!(list_positions_rᵢ, main_list)
 end
 
 list_positions_rᵢ
@@ -45,9 +51,9 @@ scatter(x, y,
     xlabel="X (m)",                                        #label of x axis
     ylabel="Y (m)",                                        #label of y axis
     zlabel="Energy (GeV)",                                 #label of z axis
-    xlim = (-minimum(x)*10^2.5,maximum(x)*1.07),
-    ylim = ( minimum(y)*1.05,maximum(y)+10^3),
-    title="Position of the core with initial energy",      #title
+    xlim = (minimum(x)*1.1,maximum(x)*1.1),
+    ylim = ( minimum(y)*0.7,maximum(y)*1.1),
+    title="Position of the core with initial energy (GeV)",      #title
     label=:"Position",                                     #label
     legend=:topright,                                      #lengend
     framestyle=:box, gridstyle=:solid,                     #frame
@@ -63,5 +69,5 @@ scatter(x, y,
     dpi=600)
 
 # Save the figure
-file_name = path_SWGO*"/swgo_files/Plots/position_core.svg"
+file_name = path_SWGO*"/swgo_files/Plots/position_core.png"
 savefig(file_name)
