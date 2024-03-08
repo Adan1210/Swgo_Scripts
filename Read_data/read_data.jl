@@ -14,32 +14,32 @@ path_SWGO = dirname(pwd())
 ###########################################################################################
 # Initialice the names of all ROOT Files to work.
 path = [];
-list_files_values = [["DAT" * lpad(i, 6, '0'), j] for i in 1:1, j in 0:0 if !((i, j) in excluded_pairs)]; 
+excluded_pairs = Set();
+list_files_values = [["DAT" * lpad(i, 6, '0'), j] for i in 1:1, j in 0:4 if !((i, j) in excluded_pairs)]; 
 ###########################################################################################
 #Create the main_list, that list contain the data for work and have the form:
 list_positions_rᵢ = [];
 #Initialize the ROOT file and almacenated in the main_list.
 for i in eachindex(list_files_values)
     # Create the names DAT000001, DAT000002, ...
-    DATXXX = list_files_values[i][1] 
+    DATXXX = list_files_values[i][1]
     YYY    = list_files_values[i][2]
 
     # Initialize the path
-    path = path_SWGO * "/swgo_files/ROOT_Aerie_C/hawcsim-$(DATXXX)_A1_gamma_$(YYY)_50000.root"
-    
+    path = path_SWGO * "/swgo_files/ROOT_rec_Aerie_C/reco-$(DATXXX)_A1_gamma_$(YYY)_50000.root"
     # Initialize the ROOT file
     f = ROOTFile(path)
-    mytree = LazyTree(f ,"XCDF",["HAWCSim.Evt.X","HAWCSim.Evt.Y"])
+    mytree = LazyTree(f ,"XCDF",["event.hit.time","rec.coreX", "rec.coreY"])
     main_list = [];
 
-    Threads.@threads for Tleaf in mytree 
-        Tbrunch = hcat(Tleaf[1]/100, Tleaf[2]/100)
-        push!(main_list, Tbrunch)
+    for Tleaf in mytree
+        element = [Tleaf[2]/100, Tleaf[3]/100]
+        push!(main_list, element)
     end
-    main_list_1 = []
-    push!(main_list_1, main_list)
-    push!(list_positions_rᵢ, main_list_1)
+
+    append!(list_positions_rᵢ, main_list)
 end
+
 list_positions_rᵢ
 
 
@@ -98,7 +98,25 @@ path = path_SWGO * "/swgo_files/ee.root"
 f = ROOTFile(path)
 # Give the names of variables of the files
 names1 = names(LazyTree(f, "XCDF"))
-names1[1]
+names1[98]
+
+mytree = LazyTree(f ,"XCDF",["event.hit.time"])
+mytree2 = LazyTree(f ,"XCDF",["rec.coreX"])
+
+main_list = []
+
+for event in mytree
+    push!(main_list, event[1])
+end
+
+for event in mytree2
+    push!(main_list, event[1])
+end
+
+
+main_list 
+###########################################################################################
+
 
 using CSV
 CSV.write("names_variables.csv", DataFrame(Column1=names1), header=false)
