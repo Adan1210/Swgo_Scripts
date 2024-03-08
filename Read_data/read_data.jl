@@ -100,23 +100,23 @@ f = ROOTFile(path)
 names1 = names(LazyTree(f, "XCDF"))
 names1[98]
 
-mytree = LazyTree(f ,"XCDF",["event.hit.time"])
-mytree2 = LazyTree(f ,"XCDF",["rec.coreX"])
+# Initialize the ROOT file
+mytree = LazyTree(f ,"XCDF",["mc.logEnergy","mc.delCore"])
 
 main_list = []
 
-for event in mytree
-    push!(main_list, event[1])
+for Tleaf in mytree
+    element = [Tleaf[2], Tleaf[1]/100]
+    push!(main_list, element)
 end
 
-for event in mytree2
-    push!(main_list, event[1])
-end
-
-
-main_list 
+main_list
 ###########################################################################################
 
 
 using CSV
 CSV.write("names_variables.csv", DataFrame(Column1=names1), header=false)
+
+
+Int64.(1.4136532e6)
+Float64(1.4136532e6)/100

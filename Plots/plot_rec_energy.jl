@@ -4,7 +4,7 @@ path_SWGO = dirname(pwd())
 ###########################################################################################
 # Initialice the names of all ROOT Files to work.
 path = [];
-list_files_values = [["DAT" * lpad(i, 6, '0'), j] for i in 1:4000, j in 0:4];
+list_files_values = [["DAT" * lpad(i, 6, '0'), j] for i in 1:100, j in 0:4];
 ###########################################################################################
 #Create the main_list, that list contain the data for work and have the form:
 list_positions_rᵢ = [];
@@ -19,13 +19,12 @@ for i in eachindex(list_files_values)
     # Initialize the ROOT file
     try
         f = ROOTFile(path)
-        mytree = LazyTree(f ,"XCDF",["mc.logEnergy","rec.coreX","rec.coreY"])
+        mytree = LazyTree(f ,"XCDF",["mc.logEnergy","mc.delCore"])
         main_list = [];
 
         for Tleaf in mytree
-            true_energy = Tleaf[1]
-            if true_energy > 10^3
-                element = [true_energy,Tleaf[2]/100, Tleaf[3]/100]
+            if Tleaf[2] > 2 #Energy > 100 GeV
+                element = [Tleaf[2], Tleaf[1]/100]
                 push!(main_list, element)
             end
 
@@ -42,7 +41,7 @@ list_positions_rᵢ
 using Plots
 
 true_energy = [arr[1] for arr in list_positions_rᵢ]
-x = [arr[2] for arr in list_positions_rᵢ]
+x = [arr[1] for arr in list_positions_rᵢ]
 y = [arr[3] for arr in list_positions_rᵢ]
 
 # Crear el gráfico de dispersión con barra de energía de color
@@ -51,8 +50,8 @@ scatter(x, y,
     xlabel="X (m)",                                        #label of x axis
     ylabel="Y (m)",                                        #label of y axis
     zlabel="Energy (GeV)",                                 #label of z axis
-    xlim = (minimum(x)*1.1,maximum(x)*1.1),
-    ylim = ( minimum(y)*0.7,maximum(y)*1.1),
+    xlim = (0,20),
+    ylim = ( 0, 0.08),
     title="Position of the core with initial energy (GeV)",      #title
     label=:"Position",                                     #label
     legend=:topright,                                      #lengend
@@ -60,14 +59,45 @@ scatter(x, y,
     gridlinewidth=2, gridalpha=0.3,                        #grid and width
 
 
-    linestyle=:solid, linewidth=1.5,                       #type of line
-    marker=:circle, markercolor=:red, markersize=3,        #marker and size
-    markerstrokecolor=:black, markerstrokewidth=0.5,       #contour of the marker
+    linestyle=:solid, linewidth=1,                       #type of line
+    marker=:circle, markersize=2,                          #marker and size
+    markerstrokecolor=:black, markerstrokewidth=0.2,       #contour of the marker
     titlefont=font("Times New Roman",10),
     guidefont=font("Times New Roman",10),
 
     dpi=600)
 
 # Save the figure
-file_name = path_SWGO*"/swgo_files/Plots/position_core.png"
+file_name = path_SWGO*"/swgo_files/Plots/position_core1.png"
+savefig(file_name)
+
+#######################################################################################
+using Plots
+
+true_energy = [arr[1] for arr in list_positions_rᵢ]
+r = [arr[2] for arr in list_positions_rᵢ]
+
+# Crear el gráfico de dispersión con barra de energía de color
+scatter(true_energy, r, 
+    xlabel="log(Energy) (GeV)",                                        #label of x axis
+    ylabel="r (m)",                                        #label of y axis
+    xlim = (1.9, 6.1),
+    ylim = ( 0, maximum(r) + 0.1),
+    title="Diference core location vs initial particle energy (GeV)", #title
+    label=:"Diference between inicial position vs reconstructed position",                                      #label
+    legend=:topright,                                       #lengend
+    framestyle=:box, gridstyle=:solid,                      #frame
+    gridlinewidth=2, gridalpha=0.3,                         #grid and width
+
+
+    linestyle=:solid, linewidth=1,                          #type of line
+    marker=:circle, markersize=2,                           #marker and size
+    markerstrokecolor=:black, markerstrokewidth=0.2,        #contour of the marker
+    titlefont=font("Times New Roman",10),
+    guidefont=font("Times New Roman",10),
+
+    dpi=800)
+
+# Save the figure
+file_name = path_SWGO*"/swgo_files/Plots/position_core2.png"
 savefig(file_name)
