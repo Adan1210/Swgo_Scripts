@@ -1,4 +1,4 @@
-using  UnROOT, Base.Threads, Plots, Base.Filesystem, Statistics, CSV, DataFrames
+using  UnROOT, Base.Threads, Plots, Base.Filesystem, Statistics, CSV, DataFrames, JSON
 ##############################################################################################
 path_SWGO = dirname(pwd())
 ###########################################################################################
@@ -35,11 +35,11 @@ for i in eachindex(list_files_values)
 end
 file_name_df_0 = path_SWGO*"/swgo_files/Plots/df_0_r_vs_E0_binsbar.csv"
 #######################################################################################
-df_0 = DataFrame(positions_rᵢ = list_positions_rᵢ, energies = list_energies)
-CSV.write(file_name_df_0, df_0)
+#df_0 = DataFrame(positions_rᵢ = list_positions_rᵢ, energies = list_energies)
+#CSV.write(file_name_df_0, df_0)
 
 #######################################################################################
-df_0 = CSV.read(file_name_df_0, df_0)
+df_0 = CSV.read(file_name_df_0, DataFrame)
 list_positions_rᵢ = df_0[!,"positions_rᵢ"]
 list_energies = df_0[!,"energies"]
 
@@ -75,10 +75,10 @@ file_name_df = path_SWGO*"/swgo_files/Plots/df_r_vs_E0_binsbar.csv"
 #df = DataFrame(mean = list_mean_r, std = list_std_r, energies = list_energies_names)
 #CSV.write(file_name, df)
 #######################################################################################
-df = CSV.read(file_name_df, df)
-df[!,"mean"] = list_mean_r
-df[!,"std"] = list_std_r
-df[!,"energies"] = list_energies_names
+df = CSV.read(file_name_df, DataFrame)
+list_mean_r = df[!,"mean"]
+list_std_r = df[!,"std"]
+list_energies_names = df[!,"energies"]
 
 labels_energies = [string(i == 1 ? 0 : list_energies_names[i-1]/10^6, "-", list_energies_names[i]/10^6) for i in 1:length(list_energies_names)];
 
