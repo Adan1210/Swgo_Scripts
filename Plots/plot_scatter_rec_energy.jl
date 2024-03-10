@@ -67,5 +67,5 @@ scatter(x, y,
     dpi=600)
 
 # Save the figure
-file_name = path_SWGO*"/swgo_files/Plots/position_core1.png"
+file_name = path_SWGO*"/swgo_files/Plots/position_core_scatter.png"
 savefig(file_name)

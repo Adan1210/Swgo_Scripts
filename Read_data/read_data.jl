@@ -92,26 +92,37 @@ println("El valor óptimo de x es: ", optimal_params[2])
 ######################## SEE THE Variables of one file ########################################
 ###########################################################################################
 #Create the main_list, that list contain the data for work and have the form:
-main_list = [];
+
 # Initialize the path
 path = path_SWGO * "/swgo_files/ee.root"
 f = ROOTFile(path)
+
+
+# Initialize the ROOT file
+mytree = LazyTree(f ,"XCDF",["event.nHit","mc.delCore","SimEvent.energyTrue","mc.zenithAngle"])
+mytree2 = LazyTree(f ,"XCDF",["mc.delCore","SimEvent.energyTrue"])
+main_list = [];
+for Tleaf in mytree
+    if Tleaf[1]>=25 && 300>=Tleaf[2]/100>=0 && Tleaf[3]>=0 && Tleaf[4] <= π/4
+    element = [Tleaf[1], Tleaf[2]/100, Tleaf[3], Tleaf[4]]
+    push!(main_list, element)
+    end
+end
+main_list
+
+
+
+
+
+
 # Give the names of variables of the files
 names1 = names(LazyTree(f, "XCDF"))
 names1[98]
 
-# Initialize the ROOT file
-mytree = LazyTree(f ,"XCDF",["mc.logEnergy","mc.delCore"])
-
-main_list = []
-
-for Tleaf in mytree
-    element = [Tleaf[2], Tleaf[1]/100]
-    push!(main_list, element)
-end
 
 main_list
 ###########################################################################################
+
 
 
 using CSV
