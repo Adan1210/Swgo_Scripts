@@ -1,4 +1,4 @@
-using  UnROOT, DataFrames, Base.Threads, Plots, Base.Filesystem, Statistics
+using  UnROOT, Base.Threads, Plots, Base.Filesystem, Statistics
 ##############################################################################################
 path_SWGO = dirname(pwd())
 ###########################################################################################
@@ -39,7 +39,7 @@ end
 #######################################################################################
 list_mean_r, list_std_r, list_energies_names = [], [], [];
 
-temp = sort(zip(list_positions_rᵢ, list_energies), by=x -> x[2])
+temp = sort(zip(list_positions_rᵢ, list_energies), by=x -> x[2]);
 
 for j in range[1]:range[2]:range[3]
     # Inicializa las listas para cada j.
@@ -64,9 +64,9 @@ for j in range[1]:range[2]:range[3]
     push!(list_energies_names, j)
 end
 
-labels_energies = [string(i == 1 ? 0 : list_energies_names[i-1]/10^6, "-", list_energies_names[i]/10^6) for i in 1:length(list_energies_names)]
-list_mean_r
-list_std_r
+labels_energies = [string(i == 1 ? 0 : list_energies_names[i-1]/10^6, "-", list_energies_names[i]/10^6) for i in 1:length(list_energies_names)];
+#list_mean_r
+#list_std_r
 #######################################################################################
 bar(
     (0:length(labels_energies)-1), list_mean_r, yerr = list_std_r,
