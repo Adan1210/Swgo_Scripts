@@ -66,7 +66,7 @@ end
 
 labels_energies = [string(i == 1 ? 0 : list_energies_names[i-1]/10^6, "-", list_energies_names[i]/10^6) for i in 1:length(list_energies_names)]
 list_mean_r
-
+list_std_r
 #######################################################################################
 bar(
     (0:length(labels_energies)-1), list_mean_r, yerr = list_std_r,
