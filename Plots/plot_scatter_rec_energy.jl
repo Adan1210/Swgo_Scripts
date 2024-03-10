@@ -1,10 +1,10 @@
-using  UnROOT, DataFrames, Base.Threads, Plots, Base.Filesystem,Statistics, Plots
+using  UnROOT, DataFrames, Base.Threads, Plots, Base.Filesystem,Statistics, Plots, CSV, DataFrames
 ##############################################################################################
-path_SWGO = dirname(pwd())
+path_SWGO = dirname(pwd());
 ###########################################################################################
 # Initialice the names of all ROOT Files to work.
 path = [];
-list_files_values = [["DAT" * lpad(i, 6, '0'), j] for i in 1:4000, j in 0:4];
+list_files_values = [["DAT" * lpad(i, 6, '0'), j] for i in 1:2, j in 0:4];
 ###########################################################################################
 #Create the main_list, that list contain the data for work and have the form:
 list_positions_rᵢ, range = [],[10^5,10^5,10^6] ;
@@ -33,13 +33,20 @@ for i in eachindex(list_files_values)
     end
 end
 
-#list_positions_rᵢ
+file_name_df = path_SWGO*"/swgo_files/Plots/df_position_core_scatter.csv";
+#######################################################################################
+df = DataFrame(positions_rᵢ = list_positions_rᵢ);
+CSV.write(file_name_df, df);
+
+#######################################################################################
+df_0 = CSV.read(file_name_df_0, df_0);
+list_positions_rᵢ = df_0[!,"positions_rᵢ"];
 
 #######################################################################################
 
-true_energy = [arr[1] for arr in list_positions_rᵢ]
-x = [arr[2] for arr in list_positions_rᵢ]
-y = [arr[3] for arr in list_positions_rᵢ]
+true_energy = [arr[1] for arr in list_positions_rᵢ];
+x = [arr[2] for arr in list_positions_rᵢ];
+y = [arr[3] for arr in list_positions_rᵢ];
 
 # Crear el gráfico de dispersión con barra de energía de color
 scatter(x, y, 
@@ -67,5 +74,5 @@ scatter(x, y,
     dpi=600)
 
 # Save the figure
-file_name = path_SWGO*"/swgo_files/Plots/position_core_scatter.png"
-savefig(file_name)
+file_name = path_SWGO*"/swgo_files/Plots/position_core_scatter.png";
+savefig(file_name);
