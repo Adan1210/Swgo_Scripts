@@ -35,8 +35,8 @@ end
 
 file_name_df = path_SWGO*"/swgo_files/Plots/df_position_core_scatter.csv";
 #######################################################################################
-#df = DataFrame(positions_rᵢ = list_positions_rᵢ)
-#CSV.write(file_name_df, df)
+df = DataFrame(positions_rᵢ = list_positions_rᵢ)
+CSV.write(file_name_df, df)
 
 #######################################################################################
 df = CSV.read(file_name_df, DataFrame)

@@ -1,4 +1,4 @@
-using  UnROOT, Base.Threads, Plots, Base.Filesystem, Statistics, CSV, DataFrames, JSON
+using  UnROOT, Base.Threads, Plots, Base.Filesystem, Statistics, CSV, DataFrames
 ##############################################################################################
 path_SWGO = dirname(pwd())
 ###########################################################################################
