@@ -1,10 +1,10 @@
-using  UnROOT, DataFrames, Base.Threads, Plots, Base.Filesystem,Statistics, Plots, CSV, DataFrames, JSON
+using  UnROOT, DataFrames, Plots,Statistics, Plots, CSV, JSON
 ##############################################################################################
 path_SWGO = dirname(pwd());
 ###########################################################################################
 # Initialice the names of all ROOT Files to work.
 path = [];
-list_files_values = [["DAT" * lpad(i, 6, '0'), j] for i in 1:4000, j in 0:4];
+list_files_values = [["DAT" * lpad(i, 6, '0'), j] for i in 1:4, j in 0:4];
 ###########################################################################################
 #Create the main_list, that list contain the data for work and have the form:
 list_positions_rᵢ, range = [],[10^5,10^5,10^6] ;
@@ -19,12 +19,12 @@ for i in eachindex(list_files_values)
     # Initialize the ROOT file
     try
         f = ROOTFile(path)
-        mytree = LazyTree(f ,"XCDF",["event.nHit","mc.coreY","mc.coreX","SimEvent.energyTrue","mc.zenithAngle"])
+        mytree = LazyTree(f ,"XCDF",["event.nHit","mc.coreY","mc.delCore","mc.coreX","SimEvent.energyTrue","mc.zenithAngle"])
         main_list = [];
 
         for Tleaf in mytree
-            if Tleaf[1]>=25 && 300>=Tleaf[2]/100>=-300 && Tleaf[3]>=0 && 300>=Tleaf[4]/100>=-300 && Tleaf[5] <= π/4 
-                element = [Tleaf[3], Tleaf[4]/100,Tleaf[2]/100] #[Energy, X, y]
+            if Tleaf[1]>=25 && 300>=Tleaf[3]/100 && Tleaf[4]>=0 && π/4>=Tleaf[6] 
+                element = [Tleaf[4], Tleaf[5]/100,Tleaf[2]/100] #[Energy, X, y]
                 push!(main_list, element)
             end
         end
@@ -32,17 +32,17 @@ for i in eachindex(list_files_values)
     catch e
     end
 end
-
+#######################################################################################
 file_name_df = path_SWGO*"/swgo_files/Plots/df_position_core_scatter.csv";
 #######################################################################################
-df = DataFrame(positions_rᵢ = list_positions_rᵢ)
-CSV.write(file_name_df, df)
+#df = DataFrame(positions_rᵢ = list_positions_rᵢ)
+#CSV.write(file_name_df, df)
 
 #######################################################################################
-df = CSV.read(file_name_df, DataFrame)
-string_list_positions_rᵢ = df[!,"positions_rᵢ"]
+df = CSV.read(file_name_df, DataFrame);
+string_list_positions_rᵢ = df[!,"positions_rᵢ"];
 # Inicializar un array vacío para almacenar los arrays de Float64
-list_positions_rᵢ = Array{Float64,1}[]
+list_positions_rᵢ = Array{Float64,1}[];
 
 # Convertir cada string en un array de Float64 y agregarlo al array de arrays
 for string in string_list_positions_rᵢ
@@ -77,7 +77,7 @@ scatter(x, y,
     c=reverse(cgrad(:viridis)),
     titlefont=font("Times New Roman",10),
     guidefont=font("Times New Roman",10),
-    dpi=600)
+    dpi=500)
 
 # Save the figure
 file_name = path_SWGO*"/swgo_files/Plots/position_core_scatter.png";

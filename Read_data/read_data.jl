@@ -1,14 +1,14 @@
-using  UnROOT, Base.Threads, Base.Filesystem
+using  UnROOT
 ##############################################################################################
 path_SWGO = dirname(pwd())
 path = path_SWGO * "/swgo_files/ee.root"
 ###########################################################################################
 f = ROOTFile(path)
 # Initialize the ROOT file
-mytree = LazyTree(f ,"XCDF",["event.nHit","mc.coreY","mc.coreX","SimEvent.energyTrue","mc.zenithAngle"])
+mytree = LazyTree(f ,"XCDF",["event.nHit","mc.delCore","SimEvent.energyTrue","rec.LHLatDistFitEnergy","mc.zenithAngle","mc.logEnergy"])
 main_list = [];
 for Tleaf in mytree
-    if Tleaf[1]>=25 && 300>=Tleaf[2]/100>=-300 && Tleaf[3]>=0 && 300>=Tleaf[4]/100>=-300 && Tleaf[5] <= π/4
+    if Tleaf[1]>=25 && 300>=Tleaf[2]/100 && Tleaf[3]>=0 && π/4>=Tleaf[5]
     element = [Tleaf[1], Tleaf[2]/100, Tleaf[3], Tleaf[4], Tleaf[5]]
     push!(main_list, element)
     end
