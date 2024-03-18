@@ -1,8 +1,7 @@
 
 # Crear un histograma 2D que funcione como un mapa de calor
-heatmap(randn(100,100), bins=(50,50), color=:viridis, colorbar=true)
-
-
+heatmap(randn(10,10), color=:viridis, colorbar=true)
+randn(10,10)
 using  UnROOT, DataFrames, Plots,Statistics, Plots, CSV, JSON
 ##############################################################################################
 path_SWGO = dirname(pwd());
@@ -28,7 +27,7 @@ for i in eachindex(list_files_values)
 
         for Tleaf in mytree
             if Tleaf[1]>=25 && 300>=Tleaf[2]/100 && Tleaf[3]>=0 && π/4>=Tleaf[5] 
-                element = [Tleaf[4], Tleaf[5]/100,Tleaf[2]/100] #[Energy, X, y]
+                element = [Tleaf[3], Tleaf[4],Tleaf[6]] #[Energy, X, y]
                 push!(main_list, element)
             end
         end
@@ -36,13 +35,23 @@ for i in eachindex(list_files_values)
     catch e
     end
 end
+true_energy = [arr[1] for arr in list_positions_rᵢ]
+true_log_energy = [arr[2] for arr in list_positions_rᵢ]
+rec_log_energy = [arr[3] for arr in list_positions_rᵢ]
 
 
 
 
+# Tus datos de ejemplo, necesitas reemplazar estos con tus datos reales
+E_true = rand(10:100, 1000)  # Energías verdaderas aleatorias
+E_reco = E_true .* (1 .+ (rand(1000) .- 0.5) / 10)  # Energías reconstruidas con un pequeño error
 
+# Calcular los logaritmos necesarios para los ejes x e y
+log_E_true = log10.(E_true)
+log_ratio = log10.(E_reco ./ E_true)
 
-
+# Crear un histograma 2D que funcione como un mapa de calor
+heatmap(log_E_true, log_ratio, bins=(50,50), color=:viridis, colorbar=true)
 
 
 
