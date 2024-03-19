@@ -1,11 +1,21 @@
 using  UnROOT
 ##############################################################################################
 path_SWGO = dirname(pwd())
-path = path_SWGO * "/swgo_files/ee.root"
+path = path_SWGO * "/swgo_files/ROOT_rec_Aerie_C/reco-DAT000023_A1_gamma_0_50000.root"
 ###########################################################################################
 f = ROOTFile(path)
 # Initialize the ROOT file
-mytree = LazyTree(f ,"XCDF",["event.nHit","mc.delCore","SimEvent.energyTrue","rec.LHLatDistFitEnergy","mc.zenithAngle","mc.logEnergy"])
+mytree = LazyTree(f ,"XCDF",["mc.logGroundEnergy", "SimEvent.xCoreTrue", "SimEvent.nMuonParticles", "SimEvent.energyTrue", "SimEvent.yCoreTrue", "mc.coreX", "SimEvent.sumMuonEnergy", "mc.delCore", "mc.logEnergy", "event.nHit", "rec.LHLatDistFitEnergy", "mc.delAngle", "mc.coreY", "SimEvent.nHadronParticles", "SimEvent.sumHadronEnergy", "mc.zenithAngle", "SimEvent.sumEMEnergy"])
+
+mytree2 = LazyTree(f ,"XCDF",["mc.coreY"])
+LazyTree(f ,"XCDF",["SimEvent.xCoreTrue"])
+
+names1 = names(mytree)
+println(names1)
+names2 = [replace(text, "_" => ".") for text in names1];
+println(names2);
+
+
 main_list = [];
 for Tleaf in mytree
     if Tleaf[1]>=25 && 300>=Tleaf[2]/100 && Tleaf[3]>=0 && π/4>=Tleaf[5]
@@ -16,13 +26,11 @@ end
 main_list
 
 # Give the names of variables of the files
-names1 = names(LazyTree(f, "XCDF"))
-names1
+names1 = names(mytree)
 ###########################################################################################
 
 using CSV
 CSV.write("names_variables.csv", DataFrame(Column1=names1), header=false)
-
 
 Int64.(1.4136532e6)
 Float64(1.4136532e6)/100

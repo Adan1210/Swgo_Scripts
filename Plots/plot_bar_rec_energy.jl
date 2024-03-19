@@ -1,61 +1,25 @@
-using  UnROOT, DataFrames, Plots,Statistics, Plots, CSV, JSON
-##############################################################################################
+using DataFrames, CSV
+#######################################################################################
 path_SWGO = dirname(pwd())
-###########################################################################################
-# Initialice the names of all ROOT Files to work.
-path = [];
-list_files_values = [["DAT" * lpad(i, 6, '0'), j] for i in 1:4000, j in 0:4];
+file_name_df = path_SWGO*"/swgo_files/Plots/df_data_server_2D.csv"
+df = CSV.read(file_name_df, DataFrame)
+#######################################################################################
+list_positions_rᵢ = Array(df[!, "mc_delCore"])
+list_energies = Array(df[!, "SimEvent_energyTrue"] / 1000)
 #######################################################################################
 #Create the main_list, that list contain the data for work and have the form:
-list_positions_rᵢ, list_energies, range = [], [],[10^5,10^5,10^6] ;
+range1 = [10^5,10^5,10^6] ;
+# Convertir el resultado de zip en un Array de Tuples
+temp = sort(collect(zip(list_positions_rᵢ, list_energies)), by = x -> x[2])
 
-#Initialize the ROOT file and almacenated in the main_list.
-for i in eachindex(list_files_values)
-    # Create the names DAT000001, DAT000002, ...
-    DATXXX = list_files_values[i][1]
-    YYY    = list_files_values[i][2]
-
-    # Initialize the path
-    path = path_SWGO * "/swgo_files/ROOT_rec_Aerie_C/reco-$(DATXXX)_A1_gamma_$(YYY)_50000.root"
-    # Initialize the ROOT file
-    try
-        f = ROOTFile(path)
-        mytree = LazyTree(f ,"XCDF",["event.nHit","mc.delCore","SimEvent.energyTrue","mc.zenithAngle"])
-
-        for Tleaf in mytree
-            if Tleaf[1]>=25 && 300>=Tleaf[2]/100>=0 && Tleaf[3]>=0 && Tleaf[4] <= π/4
-                push!(list_positions_rᵢ, Tleaf[2]/100)
-                push!(list_energies, Tleaf[3])
-            end
-        end
-
-    catch e
-
-    end
-end
-file_name_df_0 = path_SWGO*"/swgo_files/Plots/df_0_r_vs_E0_binsbar.csv"
-#######################################################################################
-#df_0 = DataFrame(positions_rᵢ = list_positions_rᵢ, energies = list_energies)
-#CSV.write(file_name_df_0, df_0)
-
-#######################################################################################
-df_0 = CSV.read(file_name_df_0, DataFrame)
-list_positions_rᵢ = df_0[!,"positions_rᵢ"]
-list_energies = df_0[!,"energies"]
-
-#######################################################################################
-list_mean_r, list_std_r, list_energies_names = [], [], [];
-
-temp = sort(zip(list_positions_rᵢ, list_energies), by=x -> x[2]);
-
-for j in range[1]:range[2]:range[3]
+for j in range1:range1[2]:range1[3]
     # Inicializa las listas para cada j.
     list_positions_rᵢ_j = Float64[]
     list_energies_rᵢ_j = Float64[]
 
     # Recorre 'temp' una vez y acumula los valores que cumplan la condición.
     for x in temp
-        if j - range[2] <= x[2] <= j
+        if j - range1 <= x[2] <= j
             push!(list_positions_rᵢ_j, x[1])
         end
     end
@@ -89,6 +53,7 @@ bar(
     ylim=(0,14),                                                           #limits of y axis
     xticks=(0:length(labels_energies),labels_energies) ,                                                        
     yticks=(-3:2:15),
+
     title="Mean of Core Position",                                         #title
     #label=:"Photon",                                                      # label
     legend=false,      #legendtitle="Primary Particle:", legend =:topright,       
