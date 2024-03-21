@@ -6,7 +6,32 @@ path_SWGO = dirname(pwd());
 path = [];
 list_files_values = [["DAT" * lpad(i, 6, '0'), j] for i in 1:4000, j in 0:0];
 ###########################################################################################
-df = DataFrame(mc_logGroundEnergy=Float64[], SimEvent_xCoreTrue=Float64[], SimEvent_nMuonParticles=Int64[], SimEvent_energyTrue=Float64[], SimEvent_yCoreTrue=Float64[], mc_coreX=Float64[], SimEvent_sumMuonEnergy=Float64[], mc_delCore=Float64[], mc_logEnergy=Float64[], event_nHit=Int64[], rec_LHLatDistFitEnergy=Float64[], mc_delAngle=Float64[], mc_coreY=Float64[], SimEvent_nHadronParticles=Int64[], SimEvent_sumHadronEnergy=Float64[], mc_zenithAngle=Float64[], SimEvent_sumEMEnergy=Float64[]);
+df = DataFrame(
+    mc_logGroundEnergy=Float64[], 
+    SimEvent_xCoreTrue=Float64[], 
+    SimEvent_nMuonParticles=Int64[], 
+    SimEvent_energyTrue=Float64[], 
+    SimEvent_yCoreTrue=Float64[], 
+    mc_coreX=Float64[], 
+    SimEvent_sumMuonEnergy=Float64[], 
+    mc_delCore=Float64[],
+    rec_zenithAngle=Float64[], 
+    mc_logEnergy=Float64[], 
+    event_nHit=Int64[], 
+    rec_coreX=Float64[], 
+    rec_coreY=Float64[], 
+    rec_LHLatDistFitEnergy=Float64[], 
+    mc_delAngle=Float64[], 
+    SimEvent_phiTrue=Float64[], 
+    mc_coreY=Float64[], 
+    SimEvent_nHadronParticles=Int64[], 
+    SimEvent_thetaTrue=Float64[], 
+    SimEvent_sumHadronEnergy=Float64[], 
+    mc_zenithAngle=Float64[], 
+    rec_azimuthAngle=Float64[], 
+    SimEvent_sumEMEnergy=Float64[]);
+
+#df_a = DataFrame(SimEvent_xCoreTrue=Float64[], SimEvent_energyTrue=Float64[], SimEvent_yCoreTrue=Float64[], mc_delCore=Float64[], rec_zenithAngle=Float64[], event_nHit=Int64[], rec_coreX=Float64[], rec_coreY=Float64[], rec_LHLatDistFitEnergy=Float64[], SimEvent_phiTrue=Float64[], SimEvent_thetaTrue=Float64[], rec_azimuthAngle=Float64[], mc_zenithAngle=Float64[]);
 # mc.delCore: Difference between reconstructed and true core
 # SimEvent.energyTrue: Same as mc.logEnergy without Log10(1/GeV)
 # rec.LHLatDistFitEnergy: Energy reconstructed by the LHLDF method
@@ -25,20 +50,47 @@ for i in eachindex(list_files_values)
     # Initialize the ROOT file
     try
         f = ROOTFile(path)
-        mytree = LazyTree(f ,"XCDF",["mc.logGroundEnergy", "SimEvent.xCoreTrue", "SimEvent.nMuonParticles", "SimEvent.energyTrue", "SimEvent.yCoreTrue", "mc.coreX", "SimEvent.sumMuonEnergy", "mc.delCore", "mc.logEnergy", "event.nHit", "rec.LHLatDistFitEnergy", "mc.delAngle", "mc.coreY", "SimEvent.nHadronParticles", "SimEvent.sumHadronEnergy", "mc.zenithAngle", "SimEvent.sumEMEnergy"])
+
+        mytree = LazyTree(f ,"XCDF",[
+            "mc.logGroundEnergy", #1
+            "SimEvent.xCoreTrue", #2
+            "SimEvent.nMuonParticles", 
+            "SimEvent.energyTrue", #SimEvent.energyTrue(4)
+            "SimEvent.yCoreTrue", 
+            "mc.coreX", #6
+            "SimEvent.sumMuonEnergy", 
+            "mc.delCore", #mc.delCore(8)
+            "rec.zenithAngle", #9
+            "mc.logEnergy", #10
+            "event.nHit", # event.nHit(11)
+            "rec.coreX", #12
+            "rec.coreY", #13
+            "rec.LHLatDistFitEnergy", 
+            "mc.delAngle", 
+            "SimEvent.phiTrue", #16
+            "mc.coreY", 
+            "SimEvent.nHadronParticles", #18
+            "SimEvent.thetaTrue", 
+            "SimEvent.sumHadronEnergy", 
+            "mc.zenithAngle", #mc.zenithAngle(21)
+            "rec.azimuthAngle", 
+            "SimEvent.sumEMEnergy"])# 23
+
+        #mytree_a = LazyTree(f, "XCDF", ["SimEvent.xCoreTrue", "SimEvent.energyTrue", "SimEvent.yCoreTrue", "mc.delCore", "rec.zenithAngle", "event.nHit", "rec.coreX", "rec.coreY", "rec.LHLatDistFitEnergy", "SimEvent.phiTrue", "SimEvent.thetaTrue", "rec.azimuthAngle", "mc.zenithAngle"])
 
         for Tleaf in mytree
-            # event.nHit(10), mc.delCore(11), SimEvent.energyTrue(4), mc.zenithAngle(16)
-            if Tleaf[10]>=25 && 300>=Tleaf[11]/100 && Tleaf[4]>=0 && π/4>=Tleaf[16] 
-                row = (mc_logGroundEnergy=Tleaf[1], SimEvent_xCoreTrue=Tleaf[2]/100, SimEvent_nMuonParticles=Tleaf[3], SimEvent_energyTrue=Tleaf[4], SimEvent_yCoreTrue=Tleaf[5]/100, mc_coreX=Tleaf[6]/100, SimEvent_sumMuonEnergy=Tleaf[7], mc_delCore=Tleaf[8]/100, mc_logEnergy=Tleaf[9], event_nHit=Tleaf[10], rec_LHLatDistFitEnergy=Tleaf[11], mc_delAngle=Tleaf[12], mc_coreY=Tleaf[13]/100, SimEvent_nHadronParticles=Tleaf[14], SimEvent_sumHadronEnergy=Tleaf[15], mc_zenithAngle=Tleaf[16], SimEvent_sumEMEnergy=Tleaf[17])
+            #if Tleaf[11]>=25 && 300>=Tleaf[8]/100 && Tleaf[4]>=0 && π/4>=Tleaf[21] 
+                row = (mc_logGroundEnergy=Tleaf[1], SimEvent_xCoreTrue=Tleaf[2]/100, SimEvent_nMuonParticles=Tleaf[3], SimEvent_energyTrue=Tleaf[4], SimEvent_yCoreTrue=Tleaf[5], mc_coreX=Tleaf[6]/100, SimEvent_sumMuonEnergy=Tleaf[7], mc_delCore=Tleaf[8]/100, rec_zenithAngle=Tleaf[9], mc_logEnergy=Tleaf[10], event_nHit=Tleaf[11], rec_coreX=Tleaf[12]/100, rec_coreY=Tleaf[13]/100, rec_LHLatDistFitEnergy=Tleaf[14], mc_delAngle=Tleaf[15]/100, SimEvent_phiTrue=Tleaf[16], mc_coreY=Tleaf[17]/100, SimEvent_nHadronParticles=Tleaf[18], SimEvent_thetaTrue=Tleaf[19], SimEvent_sumHadronEnergy=Tleaf[20], mc_zenithAngle=Tleaf[21], rec_azimuthAngle=Tleaf[22], SimEvent_sumEMEnergy=Tleaf[23])
+
+                #row_a = (SimEvent_xCoreTrue=Tleaf[1]/100, SimEvent_energyTrue=Tleaf[2], SimEvent_yCoreTrue=Tleaf[3]/100, mc_delCore=Tleaf[4]/100, rec_zenithAngle=Tleaf[5], event_nHit=Tleaf[6], rec_coreX=Tleaf[7]/100, rec_coreY=Tleaf[8]/100, rec_LHLatDistFitEnergy=Tleaf[9], SimEvent_phiTrue=Tleaf[10], SimEvent_thetaTrue=Tleaf[11], rec_azimuthAngle=Tleaf[12], mc_zenithAngle=Tleaf[13])
                 push!(df, row, promote=true);
-            end
+            #end
         end
     catch e
     end
 end
 #######################################################################################
-file_name_df = path_SWGO*"/swgo_files/Plots/df_data_server_2D.csv";
+file_name_df = path_SWGO*"/swgo_files/Plots/df_data_server_2D_a.csv";
 df
 #######################################################################################
 CSV.write(file_name_df, df)

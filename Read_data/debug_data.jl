@@ -5,10 +5,12 @@ path = path_SWGO * "/swgo_files/ROOT_rec_Aerie_C/reco-DAT000023_A1_gamma_0_50000
 ###########################################################################################
 f = ROOTFile(path)
 # Initialize the ROOT file
-mytree = LazyTree(f ,"XCDF",["mc.logGroundEnergy", "SimEvent.xCoreTrue", "SimEvent.nMuonParticles", "SimEvent.energyTrue", "SimEvent.yCoreTrue", "mc.coreX", "SimEvent.sumMuonEnergy", "mc.delCore", "mc.logEnergy", "event.nHit", "rec.LHLatDistFitEnergy", "mc.delAngle", "mc.coreY", "SimEvent.nHadronParticles", "SimEvent.sumHadronEnergy", "mc.zenithAngle", "SimEvent.sumEMEnergy"])
+mytree0= LazyTree(f ,"XCDF",["mc.delCore","event.nHit","rec.LHLatDistFitEnergy","mc.zenithAngle"])
 
-mytree2 = LazyTree(f ,"XCDF",["mc.coreY"])
-LazyTree(f ,"XCDF",["SimEvent.xCoreTrue"])
+mytree = LazyTree(f ,"XCDF",["mc.logGroundEnergy", "SimEvent.xCoreTrue", "SimEvent.nMuonParticles", "SimEvent.energyTrue", "SimEvent.yCoreTrue", "mc.coreX", "SimEvent.sumMuonEnergy", "mc.delCore", "rec.zenithAngle", "mc.logEnergy", "event.nHit", "rec.coreX", "rec.coreY", "rec.LHLatDistFitEnergy", "mc.delAngle", "SimEvent.phiTrue", "mc.coreY", "SimEvent.nHadronParticles", "SimEvent.thetaTrue", "SimEvent.sumHadronEnergy", "mc.zenithAngle", "rec.azimuthAngle", "SimEvent.sumEMEnergy"])
+
+mytree2 = LazyTree(f, "XCDF", ["SimEvent.xCoreTrue", "SimEvent.energyTrue", "SimEvent.yCoreTrue", "mc.delCore", "rec.zenithAngle", "event.nHit", "rec.coreX", "rec.coreY", "rec.LHLatDistFitEnergy", "SimEvent.phiTrue", "SimEvent.thetaTrue", "rec.azimuthAngle", "mc.zenithAngle"])
+
 
 names1 = names(mytree)
 println(names1)
