@@ -1,7 +1,7 @@
 using  UnROOT
 ##############################################################################################
 path_SWGO = dirname(pwd())
-path = path_SWGO * "/swgo_files/ROOT_rec_Aerie_C/reco-DAT000023_A1_gamma_0_50000.root"
+path = path_SWGO * "/swgo_files/ROOT_rec_Aerie_C/reco-DAT000023_A1_gamma_1_50000.root"
 ###########################################################################################
 f = ROOTFile(path)
 # Initialize the ROOT file
@@ -31,7 +31,10 @@ mytree1 = LazyTree(f ,"XCDF",["mc.logGroundEnergy",
 "SimEvent.sumHadronEnergy", 
 "mc.zenithAngle", 
 "rec.azimuthAngle", 
-"SimEvent.sumEMEnergy"])
+"SimEvent.sumEMEnergy",
+"event.eventID"])
+
+#mytree2 = LazyTree(f ,"XCDF",["event.eventID"])
 
 mytree_name = mytree
 
