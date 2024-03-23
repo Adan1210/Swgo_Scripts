@@ -5,9 +5,11 @@ path = path_SWGO * "/swgo_files/ROOT_rec_Aerie_C/reco-DAT000023_A1_gamma_0_50000
 ###########################################################################################
 f = ROOTFile(path)
 # Initialize the ROOT file
-mytree0= LazyTree(f ,"XCDF",["mc.delCore","event.nHit","rec.LHLatDistFitEnergy","mc.zenithAngle"])
+mytree = LazyTree(f ,"XCDF")
 
-mytree = LazyTree(f ,"XCDF",["mc.logGroundEnergy", 
+mytree0= LazyTree(f ,"XCDF",["mc.delCore","event.nHit","rec.LHLatDistFitEnergy","mc.zenithAngle","event.eventID"])
+
+mytree1 = LazyTree(f ,"XCDF",["mc.logGroundEnergy", 
 "SimEvent.xCoreTrue", 
 "SimEvent.nMuonParticles", 
 "SimEvent.energyTrue", 
@@ -31,13 +33,12 @@ mytree = LazyTree(f ,"XCDF",["mc.logGroundEnergy",
 "rec.azimuthAngle", 
 "SimEvent.sumEMEnergy"])
 
-mytree2 = LazyTree(f, "XCDF", ["SimEvent.xCoreTrue", "SimEvent.energyTrue", "SimEvent.yCoreTrue", "mc.delCore", "rec.zenithAngle", "event.nHit", "rec.coreX", "rec.coreY", "rec.LHLatDistFitEnergy", "SimEvent.phiTrue", "SimEvent.thetaTrue", "rec.azimuthAngle", "mc.zenithAngle"])
+mytree_name = mytree
 
-
-names1 = names(mytree)
-println(names1)
+names1 = names(mytree_name);
+println(names1);
 names2 = [replace(text, "_" => ".") for text in names1];
-println(names2);
+println(names2)
 
 
 main_list = [];
