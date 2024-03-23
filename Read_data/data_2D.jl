@@ -4,7 +4,7 @@ path_SWGO = dirname(pwd());
 ###########################################################################################
 # Initialice the names of all ROOT Files to work.
 path = [];
-list_files_values = [["DAT" * lpad(i, 6, '0'), j] for i in 1:4000, j in 0:0];
+list_files_values = [["DAT" * lpad(i, 6, '0'), j] for i in 1:1, j in 0:0];
 ###########################################################################################
 df = DataFrame(
     mc_logGroundEnergy=Float64[], 
@@ -31,7 +31,7 @@ df = DataFrame(
     rec_azimuthAngle=Float64[], 
     SimEvent_sumEMEnergy=Float64[]);
 
-#df_a = DataFrame(SimEvent_xCoreTrue=Float64[], SimEvent_energyTrue=Float64[], SimEvent_yCoreTrue=Float64[], mc_delCore=Float64[], rec_zenithAngle=Float64[], event_nHit=Int64[], rec_coreX=Float64[], rec_coreY=Float64[], rec_LHLatDistFitEnergy=Float64[], SimEvent_phiTrue=Float64[], SimEvent_thetaTrue=Float64[], rec_azimuthAngle=Float64[], mc_zenithAngle=Float64[]);
+    
 # mc.delCore: Difference between reconstructed and true core
 # SimEvent.energyTrue: Same as mc.logEnergy without Log10(1/GeV)
 # rec.LHLatDistFitEnergy: Energy reconstructed by the LHLDF method
@@ -79,12 +79,34 @@ for i in eachindex(list_files_values)
         #mytree_a = LazyTree(f, "XCDF", ["SimEvent.xCoreTrue", "SimEvent.energyTrue", "SimEvent.yCoreTrue", "mc.delCore", "rec.zenithAngle", "event.nHit", "rec.coreX", "rec.coreY", "rec.LHLatDistFitEnergy", "SimEvent.phiTrue", "SimEvent.thetaTrue", "rec.azimuthAngle", "mc.zenithAngle"])
 
         for Tleaf in mytree
-            #if Tleaf[11]>=25 && 300>=Tleaf[8]/100 && Tleaf[4]>=0 && π/4>=Tleaf[21] 
-                row = (mc_logGroundEnergy=Tleaf[1], SimEvent_xCoreTrue=Tleaf[2]/100, SimEvent_nMuonParticles=Tleaf[3], SimEvent_energyTrue=Tleaf[4], SimEvent_yCoreTrue=Tleaf[5], mc_coreX=Tleaf[6]/100, SimEvent_sumMuonEnergy=Tleaf[7], mc_delCore=Tleaf[8]/100, rec_zenithAngle=Tleaf[9], mc_logEnergy=Tleaf[10], event_nHit=Tleaf[11], rec_coreX=Tleaf[12]/100, rec_coreY=Tleaf[13]/100, rec_LHLatDistFitEnergy=Tleaf[14], mc_delAngle=Tleaf[15]/100, SimEvent_phiTrue=Tleaf[16], mc_coreY=Tleaf[17]/100, SimEvent_nHadronParticles=Tleaf[18], SimEvent_thetaTrue=Tleaf[19], SimEvent_sumHadronEnergy=Tleaf[20], mc_zenithAngle=Tleaf[21], rec_azimuthAngle=Tleaf[22], SimEvent_sumEMEnergy=Tleaf[23])
+            if Tleaf[11]>=25 && 300>=Tleaf[8]/100 && Tleaf[4]>=0 && π/4>=Tleaf[21]
+                
+                row = (mc_logGroundEnergy=Tleaf[1],
+                 SimEvent_xCoreTrue=Tleaf[2]/100, 
+                 SimEvent_nMuonParticles=Tleaf[3], 
+                 SimEvent_energyTrue=Tleaf[4], 
+                 SimEvent_yCoreTrue=Tleaf[5]/100, 
+                 mc_coreX=Tleaf[6]/100, 
+                 SimEvent_sumMuonEnergy=Tleaf[7], 
+                 mc_delCore=Tleaf[8]/100, 
+                 rec_zenithAngle=Tleaf[9], 
+                 mc_logEnergy=Tleaf[10], 
+                 event_nHit=Tleaf[11], 
+                 rec_coreX=Tleaf[12]/100, 
+                 rec_coreY=Tleaf[13]/100, 
+                 rec_LHLatDistFitEnergy=Tleaf[14], 
+                 mc_delAngle=Tleaf[15], 
+                 SimEvent_phiTrue=Tleaf[16], 
+                 mc_coreY=Tleaf[17]/100, 
+                 SimEvent_nHadronParticles=Tleaf[18], 
+                 SimEvent_thetaTrue=Tleaf[19], 
+                 SimEvent_sumHadronEnergy=Tleaf[20], 
+                 mc_zenithAngle=Tleaf[21], 
+                 rec_azimuthAngle=Tleaf[22], 
+                 SimEvent_sumEMEnergy=Tleaf[23])
 
-                #row_a = (SimEvent_xCoreTrue=Tleaf[1]/100, SimEvent_energyTrue=Tleaf[2], SimEvent_yCoreTrue=Tleaf[3]/100, mc_delCore=Tleaf[4]/100, rec_zenithAngle=Tleaf[5], event_nHit=Tleaf[6], rec_coreX=Tleaf[7]/100, rec_coreY=Tleaf[8]/100, rec_LHLatDistFitEnergy=Tleaf[9], SimEvent_phiTrue=Tleaf[10], SimEvent_thetaTrue=Tleaf[11], rec_azimuthAngle=Tleaf[12], mc_zenithAngle=Tleaf[13])
                 push!(df, row, promote=true);
-            #end
+            end
         end
     catch e
     end
