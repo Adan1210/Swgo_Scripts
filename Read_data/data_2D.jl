@@ -134,7 +134,7 @@ path_SWGO = dirname(pwd());
 ###########################################################################################
 # Initialice the names of all ROOT Files to work.
 path = [];
-list_files_values = [["DAT" * lpad(i, 6, '0'), j] for i in 1:4000, j in 0:4];
+list_files_values = [["DAT" * lpad(i, 6, '0'), j] for i in 1:4, j in 0:4];
 ###########################################################################################
 df = DataFrame(
     mc_logGroundEnergy=Float64[], 
@@ -241,5 +241,5 @@ for i in eachindex(list_files_values)
 end
 #######################################################################################
 # Write the DataFrame to a CSV file
-file_name_df = path_SWGO*"/swgo_files/Plots/CSV_M_L/df_data_server_2D_$(DATXXX)_$(YYY).csv"
+file_name_df = path_SWGO*"/swgo_files/Plots/df_data_server_2D.csv"
 CSV.write(file_name_df, df)
