@@ -9,34 +9,34 @@ mytree = LazyTree(f ,"XCDF")
 
 mytree0= LazyTree(f ,"XCDF",["mc.delCore","event.nHit","rec.LHLatDistFitEnergy","mc.zenithAngle","event.eventID"])
 
-mytree1 = LazyTree(f ,"XCDF",["mc.logGroundEnergy", 
-"SimEvent.xCoreTrue", 
-"SimEvent.nMuonParticles", 
-"SimEvent.energyTrue", 
-"SimEvent.yCoreTrue", 
-"mc.coreX", 
-"SimEvent.sumMuonEnergy", 
-"mc.delCore", 
-"rec.zenithAngle", 
-"mc.logEnergy", 
-"event.nHit", 
-"rec.coreX", 
-"rec.coreY", 
-"rec.LHLatDistFitEnergy", 
-"mc.delAngle", 
-"SimEvent.phiTrue", 
-"mc.coreY", 
-"SimEvent.nHadronParticles", 
-"SimEvent.thetaTrue", 
-"SimEvent.sumHadronEnergy", 
-"mc.zenithAngle", 
-"rec.azimuthAngle", 
-"SimEvent.sumEMEnergy",
-"event.eventID"])
+mytree1 = LazyTree(f ,"XCDF",[
+    "mc.logGroundEnergy", #1
+    "SimEvent.xCoreTrue", #2
+    "SimEvent.nMuonParticles", #3
+    "SimEvent.energyTrue", #SimEvent.energyTrue(4)
+    "SimEvent.yCoreTrue", 
+    "mc.coreX", #6
+    "SimEvent.sumMuonEnergy", #7
+    "mc.delCore", #mc.delCore(8)
+    "rec.zenithAngle", #9
+    "mc.logEnergy", #11
+    "event.nHit", # event.nHit(12)
+    "rec.coreX", #13
+    "rec.coreY", #14
+    "rec.LHLatDistFitEnergy", #15
+    "mc.delAngle", #16
+    "SimEvent.phiTrue", #17
+    "mc.coreY", #18
+    "SimEvent.nHadronParticles", #19
+    "SimEvent.thetaTrue", #20
+    "SimEvent.sumHadronEnergy", #21
+    "mc.zenithAngle", #mc.zenithAngle(22)
+    "rec.azimuthAngle", #rec.azimuthAngle(23)
+    "SimEvent.sumEMEnergy"])# 24
 
 #mytree2 = LazyTree(f ,"XCDF",["event.eventID"])
 
-mytree_name = mytree
+mytree_name = mytree1
 
 names1 = names(mytree_name);
 println(names1);
@@ -44,14 +44,16 @@ names2 = [replace(text, "_" => ".") for text in names1];
 println(names2)
 
 
-main_list = [];
-for Tleaf in mytree
-    if Tleaf[1]>=25 && 300>=Tleaf[2]/100 && Tleaf[3]>=0 && π/4>=Tleaf[5]
-    element = [Tleaf[1], Tleaf[2]/100, Tleaf[3], Tleaf[4], Tleaf[5]]
-    push!(main_list, element)
-    end
+df = DataFrame(
+    mc_logGroundEnergy=Float64[], 
+    SimEvent_xCoreTrue=Float64[])
+
+for Tleaf in mytree1
+    element = Dict(:mc_logGroundEnergy=>Tleaf[1], :SimEvent_xCoreTrue=>Tleaf[2])
+    push!(df, element)
 end
-main_list
+
+df
 
 # Give the names of variables of the files
 names1 = names(mytree)
