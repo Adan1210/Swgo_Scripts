@@ -7,7 +7,7 @@ f = ROOTFile(path)
 # Initialize the ROOT file
 mytree = LazyTree(f ,"XCDF")
 
-mytree0= LazyTree(f ,"XCDF",["mc.delCore","event.nHit","rec.LHLatDistFitEnergy","mc.zenithAngle","event.eventID"])
+mytree0= LazyTree(f ,"XCDF",["mc.coreR"])
 
 mytree1 = LazyTree(f ,"XCDF",[
     "mc.logGroundEnergy", #1
@@ -18,21 +18,24 @@ mytree1 = LazyTree(f ,"XCDF",[
     "mc.coreX", #6
     "SimEvent.sumMuonEnergy", #7
     "mc.delCore", #mc.delCore(8)
-    "rec.zenithAngle", #9
+    "event.eventID", #9
+    "rec.zenithAngle", #10
     "mc.logEnergy", #11
     "event.nHit", # event.nHit(12)
     "rec.coreX", #13
-    "rec.coreY", #14
-    "rec.LHLatDistFitEnergy", #15
-    "mc.delAngle", #16
-    "SimEvent.phiTrue", #17
-    "mc.coreY", #18
-    "SimEvent.nHadronParticles", #19
-    "SimEvent.thetaTrue", #20
-    "SimEvent.sumHadronEnergy", #21
-    "mc.zenithAngle", #mc.zenithAngle(22)
-    "rec.azimuthAngle", #rec.azimuthAngle(23)
-    "SimEvent.sumEMEnergy"])# 24
+    "mc.coreR", #14
+    "rec.coreY", #15
+    "rec.LHLatDistFitEnergy", #16
+    "mc.delAngle", #17
+    "SimEvent.phiTrue", #18
+    "mc.coreY", #19
+    "SimEvent.nHadronParticles", #20
+    "SimEvent.thetaTrue", #21
+    "SimEvent.sumHadronEnergy", #22
+    "mc.zenithAngle", #mc.zenithAngle(23)
+    "rec.azimuthAngle", #rec.azimuthAngle(24)
+    "SimEvent.sumEMEnergy" #25
+    ])
 
 #mytree2 = LazyTree(f ,"XCDF",["event.eventID"])
 

@@ -3,8 +3,7 @@ using  UnROOT, DataFrames, CSV;
 path_SWGO = dirname(pwd());
 ###########################################################################################
 # Initialice the names of all ROOT Files to work.
-path = [];
-list_files_values = [["DAT" * lpad(i, 6, '0'), j] for i in 1:1, j in 0:4];
+list_files_values = [["DAT" * lpad(i, 6, '0'), j] for i in 1:4000, j in 0:4];
 ###########################################################################################
 df = DataFrame(
     mc_logGroundEnergy=Float64[], 
@@ -15,10 +14,12 @@ df = DataFrame(
     mc_coreX=Float64[], 
     SimEvent_sumMuonEnergy=Float64[], 
     mc_delCore=Float64[],
+    event_eventID=Int64[],
     rec_zenithAngle=Float64[], 
     mc_logEnergy=Float64[], 
     event_nHit=Int64[], 
-    rec_coreX=Float64[], 
+    rec_coreX=Float64[],
+    mc_coreR=Float64[],
     rec_coreY=Float64[], 
     rec_LHLatDistFitEnergy=Float64[], 
     mc_delAngle=Float64[], 
@@ -53,31 +54,35 @@ for i in eachindex(list_files_values)
         mytree = LazyTree(f ,"XCDF",[
             "mc.logGroundEnergy", #1
             "SimEvent.xCoreTrue", #2
-            "SimEvent.nMuonParticles", 
+            "SimEvent.nMuonParticles", #3
             "SimEvent.energyTrue", #SimEvent.energyTrue(4)
             "SimEvent.yCoreTrue", 
             "mc.coreX", #6
-            "SimEvent.sumMuonEnergy", 
+            "SimEvent.sumMuonEnergy", #7
             "mc.delCore", #mc.delCore(8)
-            "rec.zenithAngle", #9
-            "mc.logEnergy", #10
-            "event.nHit", # event.nHit(11)
-            "rec.coreX", #12
-            "rec.coreY", #13
-            "rec.LHLatDistFitEnergy", 
-            "mc.delAngle", 
-            "SimEvent.phiTrue", #16
-            "mc.coreY", 
-            "SimEvent.nHadronParticles", #18
-            "SimEvent.thetaTrue", 
-            "SimEvent.sumHadronEnergy", 
-            "mc.zenithAngle", #mc.zenithAngle(21)
-            "rec.azimuthAngle", 
-            "SimEvent.sumEMEnergy"])# 23
+            "event.eventID", #9
+            "rec.zenithAngle", #10
+            "mc.logEnergy", #11
+            "event.nHit", # event.nHit(12)
+            "rec.coreX", #13
+            "mc.coreR", #14
+            "rec.coreY", #15
+            "rec.LHLatDistFitEnergy", #16
+            "mc.delAngle", #17
+            "SimEvent.phiTrue", #18
+            "mc.coreY", #19
+            "SimEvent.nHadronParticles", #20
+            "SimEvent.thetaTrue", #21
+            "SimEvent.sumHadronEnergy", #22
+            "mc.zenithAngle", #mc.zenithAngle(23)
+            "rec.azimuthAngle", #rec.azimuthAngle(24)
+            "SimEvent.sumEMEnergy" #25
+            ])
 
         for Tleaf in mytree
-            if Tleaf[11]>=25 && 300>=Tleaf[8]/100 && Tleaf[4]>=0 && π/4>=Tleaf[21]
-                row = (mc_logGroundEnergy=Tleaf[1],
+            if Tleaf[12]>=25 && 300>=Tleaf[14]/100 && Tleaf[4]>=0 && π/4>=Tleaf[23]
+                row = (
+                    mc_logGroundEnergy=Tleaf[1],
                     SimEvent_xCoreTrue=Tleaf[2]/100, 
                     SimEvent_nMuonParticles=Tleaf[3], 
                     SimEvent_energyTrue=Tleaf[4], 
@@ -85,21 +90,24 @@ for i in eachindex(list_files_values)
                     mc_coreX=Tleaf[6]/100, 
                     SimEvent_sumMuonEnergy=Tleaf[7], 
                     mc_delCore=Tleaf[8]/100, 
-                    rec_zenithAngle=Tleaf[9], 
-                    mc_logEnergy=Tleaf[10], 
-                    event_nHit=Tleaf[11], 
-                    rec_coreX=Tleaf[12]/100, 
-                    rec_coreY=Tleaf[13]/100, 
-                    rec_LHLatDistFitEnergy=Tleaf[14], 
-                    mc_delAngle=Tleaf[15], 
-                    SimEvent_phiTrue=Tleaf[16], 
-                    mc_coreY=Tleaf[17]/100, 
-                    SimEvent_nHadronParticles=Tleaf[18], 
-                    SimEvent_thetaTrue=Tleaf[19], 
-                    SimEvent_sumHadronEnergy=Tleaf[20], 
-                    mc_zenithAngle=Tleaf[21], 
-                    rec_azimuthAngle=Tleaf[22], 
-                    SimEvent_sumEMEnergy=Tleaf[23])
+                    event_eventID=Tleaf[9],
+                    rec_zenithAngle=Tleaf[10], 
+                    mc_logEnergy=Tleaf[11], 
+                    event_nHit=Tleaf[12], 
+                    rec_coreX=Tleaf[13]/100,
+                    mc_coreR=Tleaf[14]/100, 
+                    rec_coreY=Tleaf[15]/100, 
+                    rec_LHLatDistFitEnergy=Tleaf[16], 
+                    mc_delAngle=Tleaf[17], 
+                    SimEvent_phiTrue=Tleaf[18], 
+                    mc_coreY=Tleaf[19]/100, 
+                    SimEvent_nHadronParticles=Tleaf[20], 
+                    SimEvent_thetaTrue=Tleaf[21], 
+                    SimEvent_sumHadronEnergy=Tleaf[22], 
+                    mc_zenithAngle=Tleaf[23], 
+                    rec_azimuthAngle=Tleaf[24], 
+                    SimEvent_sumEMEnergy=Tleaf[25]
+                )
 
                 push!(df, row, promote=true);
             end
@@ -109,12 +117,12 @@ for i in eachindex(list_files_values)
     end
 end
 #######################################################################################
-file_name_df = path_SWGO*"/swgo_files/Plots/CSV_M_L/df_data_server_2D_$(DATXXX)_$(YYY).csv";
-df2
+file_name_df = path_SWGO*"/swgo_files/Plots/df_data_server_2D.csv";
+df
 #######################################################################################
-CSV.write(file_name_df, df2)
+CSV.write(file_name_df, df)
 
-df3=sort(df2, :event_eventID)
+df3=sort(df, :event_eventID)
 
 
 
