@@ -8,7 +8,7 @@ file_name_df = path_SWGO * "/swgo_files/Plots/df_data_server_2D.csv";
 df = CSV.read(file_name_df, DataFrame)
 #######################################################################################
 # Create the main_list, that list contain the data for work and have the form:
-list_positions_rᵢ, list_energies, scale = [], [], 10^3;
+list_positions_rᵢ, list_energies, scale = [], [], 10^5;
 range1 = scale*[1, 1, 10];
 scale_plot = range1[1]/(10^3);
 #######################################################################################
@@ -34,6 +34,6 @@ ax.tick_params(axis="y", labelsize=12, labelcolor="black");
 
 ax.grid(axis="y",color = "gray", linestyle = "--", linewidth = 0.3);
 # Save the figure
-file_name = path_SWGO*"/swgo_files/Plots/boxplot_deltaR_vs_energy_10_3.png";
+file_name = path_SWGO*"/swgo_files/Plots/boxplot_deltaR_vs_energy_10_5.png";
 # Guardar el gráfico en un archivo
 PyPlot.savefig(file_name)

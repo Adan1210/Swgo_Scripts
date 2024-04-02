@@ -3,7 +3,7 @@ using  UnROOT, DataFrames, CSV;
 path_SWGO = dirname(pwd());
 ###########################################################################################
 # Initialice the names of all ROOT Files to work.
-list_files_values = [["DAT" * lpad(i, 6, '0'), j] for i in 1:4000, j in 0:4];
+list_files_values = [["DAT" * lpad(i, 6, '0'), j] for i in 1:1, j in 0:1];
 ###########################################################################################
 df = DataFrame(
     mc_logGroundEnergy=Float64[], 
@@ -122,3 +122,5 @@ df
 #######################################################################################
 CSV.write(file_name_df, df)
 sort(df, :event_eventID)
+
+select(df, [:event_eventID])
